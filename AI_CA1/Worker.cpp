@@ -29,7 +29,7 @@ worker::~worker() {
 
 }
 
-void worker::update( float t) {
+void worker::update(float t) {
 
 	wander(m_target, t);
 
@@ -108,6 +108,19 @@ void worker::wander(sf::Vector2f player, float t) {
 	if (distance < 50.0f) {
 		m_target = sf::Vector2f(rand() % 800, rand() % 600);
 	}
+}
+
+/*
+the player catch the worker when the distance less then 10
+*/
+bool worker::catchCheck(sf::Vector2f player) {
+	float distance = (player.x - position.x) * (player.x - position.x) + (player.y - position.y) + (player.y - position.y);
+	distance = sqrt(distance);
+
+	if (distance < 10.0f) {
+		return true;
+	}
+	return false;
 }
 
 void worker::render(sf::RenderWindow& window) {

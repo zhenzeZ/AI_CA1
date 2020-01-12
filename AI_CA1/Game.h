@@ -11,10 +11,12 @@
 /// Don't forget the endif at the bottom
 /// </summary>
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 #include "Player.h"
 #include "Room.h"
 #include "Worker.h"
+#include "Bullet.h"
 
 class Game
 {
@@ -41,6 +43,10 @@ private:
 	player* m_player;
 	room* m_room;
 	worker* m_worker;
+
+	vector<worker*> m_workers; 
+	vector<bullet*> m_bullets;
+	vector<room*> m_rooms;
 
 	bool m_exitGame; // control exiting game
 

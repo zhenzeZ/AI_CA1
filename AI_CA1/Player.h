@@ -9,6 +9,8 @@ public:
 	void update(float t);
 	void render(sf::RenderWindow& window);
 
+	void saveWorker() { m_workerSaved++; }
+
 	sf::Vector2f playerPosition() { return position; } // return current positon
 	sf::Vector2f playerSize() { return size; }
 	sf::Vector2f pursuePosition() { return pursue; } // return pursue position
@@ -23,6 +25,8 @@ private:
 
 	float speed;
 	float pursueTime;
+
+	float m_workerSaved;
 
 	sf::Vector2f velocity;
 	sf::Vector2f moveDistance;

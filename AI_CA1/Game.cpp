@@ -27,6 +27,8 @@ Game::Game() :
 	m_player = new player(sf::Vector2f(600, 500));
 	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(500, 500));
 	m_worker = new worker(sf::Vector2f(300, 300));
+
+	m_workers.push_back(m_worker);
 }
 
 /// <summary>
@@ -111,9 +113,21 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	{
+		// fire a bullet
+	}
+
+
 	m_player->update(t_deltaTime.asSeconds());
 
-	m_worker->update(t_deltaTime.asSeconds());
+	for (int i = 0; i < m_workers.size(); i++) {
+		m_workers[i]->update(t_deltaTime.asSeconds());
+		if (m_workers[i]->catchCheck(m_player->playerPosition())) {
+			m_player->saveWorker();
+			m_workers.erase(m_workers.begin() + i);
+		}
+	}
 
 	if (m_room->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
 		m_player->buttonCheck();
@@ -130,7 +144,9 @@ void Game::render()
 
 	m_room->render(m_window);
 
-	m_worker->render(m_window);
+	for (int i = 0; i < m_workers.size(); i++) {
+		m_workers[i]->render(m_window);
+	}
 
 	m_player->render(m_window);
 

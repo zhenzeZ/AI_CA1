@@ -12,6 +12,8 @@ public:
 	void update(float t);
 	void render(sf::RenderWindow& window);
 
+	bool catchCheck(sf::Vector2f player);
+
 private:
 	float speed;
 	float rotation;

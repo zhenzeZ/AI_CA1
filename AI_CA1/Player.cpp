@@ -39,11 +39,6 @@ void player::update(float t) {
 
 	movementCalculate(t);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-	{
-		// fire a bullet
-	}
-
 	if (!accelerating) {
 		speed *= 0.98;
 		if (speed < 0.5f) {
