@@ -1,14 +1,14 @@
 #include "Bullet.h"
 #include <math.h>
 
-bullet::bullet(sf::Vector2f position, float radius)
+bullet::bullet(sf::Vector2f position, float radian)
 {
 	speed = 50.0f;
 	m_time = 2.0f;
 	m_alive = true;
 	setUpTexture();
 
-	setState(position, radius);
+	setState(position, radian);
 }
 
 bullet::~bullet()

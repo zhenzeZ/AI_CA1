@@ -15,6 +15,8 @@ public:
 	sf::Vector2f playerSize() { return size; }
 	sf::Vector2f pursuePosition() { return pursue; } // return pursue position
 
+	float playerRadian() { return radian; }
+
 	void buttonCheck();
 private:
 	float acceleration;

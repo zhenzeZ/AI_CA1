@@ -35,7 +35,7 @@ player::~player() {
 
 void player::update(float t) {
 
-	//buttonCheck();
+	buttonCheck();
 
 	movementCalculate(t);
 

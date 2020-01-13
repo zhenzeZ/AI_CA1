@@ -35,8 +35,8 @@ private:
 	void update(sf::Time t_deltaTime);
 	void render();
 
-	void setupFontAndText();
-	void setupSprite();
+	void setupMap();
+	void setupWorkers();
 
 	sf::RenderWindow m_window; // main SFML window
 

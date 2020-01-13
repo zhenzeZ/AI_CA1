@@ -21,14 +21,10 @@ Game::Game() :
 	m_exitGame{ false } //when true game will exit
 {
 
-	setupFontAndText(); // load font 
-	setupSprite(); // load texture
+	setupMap(); // load font 
+	setupWorkers(); // load texture
 
 	m_player = new player(sf::Vector2f(600, 500));
-	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(500, 500));
-	m_worker = new worker(sf::Vector2f(300, 300));
-
-	m_workers.push_back(m_worker);
 }
 
 /// <summary>
@@ -116,8 +112,16 @@ void Game::update(sf::Time t_deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		// fire a bullet
+		m_bullets.push_back(new bullet(m_player->playerPosition(), m_player->playerRadian()));
 	}
 
+	for (int i = 0; i < m_bullets.size(); i++) {
+		m_bullets[i]->update(t_deltaTime.asSeconds());
+
+		if (!m_bullets[i]->checkAlive()) {
+			m_bullets.erase(m_bullets.begin() + i);
+		}
+	}
 
 	m_player->update(t_deltaTime.asSeconds());
 
@@ -129,9 +133,9 @@ void Game::update(sf::Time t_deltaTime)
 		}
 	}
 
-	if (m_room->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
+	/*if (m_room->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
 		m_player->buttonCheck();
-	}
+	}*/
 
 }
 
@@ -142,7 +146,14 @@ void Game::render()
 {
 	m_window.clear(sf::Color::Black);
 
-	m_room->render(m_window);
+	for (int i = 0; i < m_rooms.size(); i++) {
+		m_rooms[i]->render(m_window);
+	}
+
+	for (int i = 0; i < m_bullets.size(); i++) {
+		m_bullets[i]->render(m_window);
+
+	}
 
 	for (int i = 0; i < m_workers.size(); i++) {
 		m_workers[i]->render(m_window);
@@ -156,15 +167,23 @@ void Game::render()
 /// <summary>
 /// load the font and setup the text message for screen
 /// </summary>
-void Game::setupFontAndText()
+void Game::setupMap()
 {
+	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(500, 500)); // size and position
+	m_rooms.push_back(m_room);
 
+	m_room = new room(sf::Vector2f(200, 400), sf::Vector2f(500, 0)); // size and position
+	m_rooms.push_back(m_room);
+
+	m_room = new room(sf::Vector2f(1000, 1000), sf::Vector2f(500, -700)); // size and position
+	m_rooms.push_back(m_room);
 }
 
 /// <summary>
 /// load the texture and setup the sprite for the logo
 /// </summary>
-void Game::setupSprite()
+void Game::setupWorkers()
 {
-
+	m_worker = new worker(sf::Vector2f(300, 300));
+	m_workers.push_back(m_worker);
 }
