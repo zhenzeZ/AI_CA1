@@ -17,7 +17,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "AI-Lab6" },
+	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "CA1" },
 	m_exitGame{ false } //when true game will exit
 {
 
