@@ -25,6 +25,7 @@ Game::Game() :
 	setupWorkers(); // load texture
 
 	m_player = new player(sf::Vector2f(600, 500));
+	m_alienNest = new AlienNest(*m_player);
 }
 
 /// <summary>

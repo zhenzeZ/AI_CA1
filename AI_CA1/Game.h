@@ -13,6 +13,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "AlienNest.h"
 #include "Player.h"
 #include "Room.h"
 #include "Worker.h"
@@ -40,6 +41,7 @@ private:
 
 	sf::RenderWindow m_window; // main SFML window
 
+	AlienNest* m_alienNest;
 	player* m_player;
 	room* m_room;
 	worker* m_worker;

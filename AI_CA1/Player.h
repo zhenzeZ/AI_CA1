@@ -18,6 +18,7 @@ public:
 	float playerRadian() { return radian; }
 
 	void buttonCheck();
+	float getMaxSpeed() { return maxSpeed; }
 private:
 	float acceleration;
 	float rotation;

@@ -30,6 +30,9 @@
     <ClInclude Include="Bullet.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AlienNest.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -49,6 +52,9 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
       <Filter>资源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AlienNest.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
