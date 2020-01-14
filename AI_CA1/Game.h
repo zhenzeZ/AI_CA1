@@ -42,6 +42,7 @@ private:
 	sf::RenderWindow m_window; // main SFML window
 
 	AlienNest* m_alienNest;
+	AlienNest* m_alienNest2;
 	player* m_player;
 	room* m_room;
 	worker* m_worker;

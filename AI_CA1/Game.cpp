@@ -1,13 +1,10 @@
 /// <summary>
-/// @author Peter Lowe
-/// @date May 2019
+/// @author Dion and Zhen
+/// @date Jan 2020
 ///
-/// you need to change the above lines or lose marks
 /// </summary>
-
 #include "Game.h"
 #include <iostream>
-
 
 
 /// <summary>
@@ -26,6 +23,7 @@ Game::Game() :
 
 	m_player = new player(sf::Vector2f(600, 500));
 	m_alienNest = new AlienNest(*m_player);
+	m_alienNest2 = new AlienNest(*m_player);
 }
 
 /// <summary>
@@ -65,6 +63,7 @@ void Game::run()
 		render(); // as many as possible
 	}
 }
+
 /// <summary>
 /// handle user and system events/ input
 /// get key presses/ mouse moves etc. from OS
