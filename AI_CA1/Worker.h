@@ -14,6 +14,8 @@ public:
 
 	bool catchCheck(sf::Vector2f player);
 
+	sf::FloatRect boundingBox();
+
 private:
 	float speed;
 	float rotation;

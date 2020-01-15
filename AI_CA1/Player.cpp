@@ -9,7 +9,8 @@ player::player(sf::Vector2f start) :
 	radian(rotation* PI / 180),
 	position(start),
 	speed(0),
-	pursueTime(0.5)
+	pursueTime(0.5),
+	m_playerInRoom(false)
 {
 
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/player.png"))
@@ -23,6 +24,16 @@ player::player(sf::Vector2f start) :
 	m_sprite.setRotation(rotation);
 	m_sprite.setOrigin(sf::Vector2f(m_texture.getSize().x / 2, m_texture.getSize().y / 2));
 
+	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
+	{
+		std::cout << "problem loading arial black font" << std::endl;
+	}
+
+	m_workers.setFont(m_font);
+	m_workers.setCharacterSize(20);
+	m_workers.setFillColor(sf::Color::White);
+	m_workers.setOutlineThickness(0.0f);
+
 	size = sf::Vector2f(m_texture.getSize());
 
 	m_view.setCenter(position); // set mid of screen to camera
@@ -34,6 +45,8 @@ player::~player() {
 }
 
 void player::update(float t) {
+
+	bounceOff(); // when player running out the room
 
 	buttonCheck();
 
@@ -48,6 +61,10 @@ void player::update(float t) {
 
 	m_sprite.setPosition(position);
 	m_sprite.setRotation(rotation);
+
+	m_workers.setPosition(position);
+
+	m_playerInRoom = false;
 }
 
 void player::movementCalculate(float t) {
@@ -72,6 +89,14 @@ void player::movementCalculate(float t) {
 	pursue = position + velocity * pursueTime;
 
 	m_view.setCenter(position); // set mid of screen to camera
+}
+
+void player::bounceOff() {
+	if (!m_playerInRoom) {
+		speed = -speed * 0.5f;
+
+		m_playerInRoom = true;
+	}
 }
 
 /*
@@ -108,4 +133,14 @@ void player::render(sf::RenderWindow& window) {
 	window.setView(m_view);
 
 	window.draw(m_sprite);
+}
+
+sf::FloatRect player::boundingBox()
+{
+	//bounding box for collision
+	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,
+		m_sprite.getGlobalBounds().top + 10,
+		m_sprite.getGlobalBounds().width - 10,
+		m_sprite.getGlobalBounds().height - 10);
+	return boundingBox;
 }

@@ -5,7 +5,7 @@ worker::worker(sf::Vector2f start, sf::Vector2f position, sf::Vector2i range) :
 	position(start),
 	rotation(0),
 	radian(rotation* PI / 180),
-	speed(150),
+	speed(100),
 	radius(150.0f),
 	m_randomOrigin(position),
 	m_randomRange(range),
@@ -107,7 +107,7 @@ void worker::wander(sf::Vector2f player, float t) {
 
 	float distance = (player.x - position.x) * (player.x - position.x) + (player.y - position.y) + (player.y - position.y);
 	distance = sqrt(distance);
-	if (distance < 10.0f) {
+	if (distance < 50.0f) {
 		m_target = sf::Vector2f(rand() % m_randomRange.x + m_randomOrigin.x, rand() % m_randomRange.y + m_randomOrigin.y);
 	}
 }
@@ -127,4 +127,14 @@ bool worker::catchCheck(sf::Vector2f player) {
 
 void worker::render(sf::RenderWindow& window) {
 	window.draw(m_sprite);
+}
+
+sf::FloatRect worker::boundingBox()
+{
+	//bounding box for collision
+	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,
+		m_sprite.getGlobalBounds().top + 10,
+		m_sprite.getGlobalBounds().width - 10,
+		m_sprite.getGlobalBounds().height - 10);
+	return boundingBox;
 }

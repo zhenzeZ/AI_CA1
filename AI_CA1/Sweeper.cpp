@@ -1,6 +1,6 @@
 #include "Sweeper.h"
 
-sweeper::sweeper(sf::Vector2f start, AIStates state) :
+sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current) :
 	PI(atan(1) * 4),
 	position(start),
 	rotation(0),
@@ -8,26 +8,17 @@ sweeper::sweeper(sf::Vector2f start, AIStates state) :
 	speed(150),
 	radius(150.0f),
 	m_target(sf::Vector2f(rand() % 800, rand() % 600)),
-	m_aiStates(state),
+	m_aiStates(AIStates::Wander),
 	viewAngle(50),
-	viewRange(150.0f)
+	viewRange(150.0f),
+	m_currentRoom(current)
 {
 
-	if (!m_texture.loadFromFile("./ASSETS/IMAGES/object1.png"))
+	if (!m_texture.loadFromFile("./ASSETS/IMAGES/Sweeper.png"))
 	{
 		std::string s("Error loading image");
 		throw std::exception(s.c_str());
 	} // loading image check
-
-	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
-	{
-		std::cout << "problem loading arial black font" << std::endl;
-	}
-	m_behaviour.setFont(m_font);
-	m_behaviour.setCharacterSize(20);
-	//m_behaviour.setOutlineColor(sf::Color::Red);
-	m_behaviour.setFillColor(sf::Color::White);
-	m_behaviour.setOutlineThickness(0.0f);
 
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(position);
@@ -42,24 +33,30 @@ sweeper::~sweeper() {
 
 }
 
-void sweeper::update(sf::Vector2f player, float t) {
+void sweeper::update(sf::Vector2f player,sf::Vector2f worker, float t) {
+
+	m_nextRoom = m_currentRoom++;
+	if (m_nextRoom >= m_roomPosition.size()) {
+		m_nextRoom = 0;
+	}
+
+	previousRoom = m_currentRoom--;
+	if (previousRoom < 0) {
+		previousRoom = m_roomPosition.size() - 1;
+	}
+
 
 	switch (m_aiStates) {
 	case AIStates::Wander:
 		wander(m_target, t);
-		m_behaviour.setString("Wander");
 		break;
 	case AIStates::Seek:
 		seek(player, t);
-		m_behaviour.setString("Seek");
 		break;
 	case AIStates::Flee:
 		flee(player, t);
-		m_behaviour.setString("Flee");
 		break;
 	}
-
-	m_behaviour.setPosition(position);
 
 	radian = rotation * PI / 180;
 
@@ -70,13 +67,13 @@ void sweeper::update(sf::Vector2f player, float t) {
 
 }
 
-void sweeper::vision(sf::Vector2f player) {
+void sweeper::vision(sf::Vector2f worker) {
 	// check the distance between player and guard
-	float distance = (player.x - position.x) * (player.x - position.x) + (player.y - position.y) + (player.y - position.y);
+	float distance = (worker.x - position.x) * (worker.x - position.x) + (worker.y - position.y) + (worker.y - position.y);
 	distance = sqrt(distance);
 
 	sf::Vector2f facing = velocity;
-	sf::Vector2f target = player - position;
+	sf::Vector2f target = worker - position;
 
 	float facingLength = sqrtf(facing.x * facing.x + facing.y * facing.y);
 	float targetLength = sqrtf(target.x * target.x + target.y * target.y);
@@ -91,6 +88,7 @@ void sweeper::vision(sf::Vector2f player) {
 
 	if (viewAngle / 2 > angleBetWeen && distance < viewRange) {
 		m_triangle.setFillColor(sf::Color(255, 0, 0, 100));
+		m_aiStates = AIStates::Seek;
 	}
 	else {
 		m_triangle.setFillColor(sf::Color(255, 255, 255, 100));
@@ -111,9 +109,9 @@ void sweeper::vision(sf::Vector2f player) {
 /*
 the object will follow the random target position
 */
-void sweeper::wander(sf::Vector2f player, float t) {
-	float distanceX = player.x - position.x;
-	float distanceY = player.y - position.y;
+void sweeper::wander(sf::Vector2f target, float t) {
+	float distanceX = target.x - position.x;
+	float distanceY = target.y - position.y;
 	float x = 0;
 	float targetRadian = atan(x);
 
@@ -171,7 +169,7 @@ void sweeper::wander(sf::Vector2f player, float t) {
 	position.y += velocity.y * t;
 
 
-	float distance = (player.x - position.x) * (player.x - position.x) + (player.y - position.y) + (player.y - position.y);
+	float distance = (target.x - position.x) * (target.x - position.x) + (target.y - position.y) + (target.y - position.y);
 	distance = sqrt(distance);
 	if (distance < 50.0f) {
 		m_target = sf::Vector2f(rand() % 800, rand() % 600);
@@ -182,6 +180,22 @@ void sweeper::wander(sf::Vector2f player, float t) {
 the object will run away from the player position
 */
 void sweeper::flee(sf::Vector2f player, float t) {
+
+	float distanceNext;
+	distanceNext = (player.x - m_roomPosition[m_nextRoom].x) * (player.x - m_roomPosition[m_nextRoom].x) + (player.y - m_roomPosition[m_nextRoom].y) + (player.y - m_roomPosition[m_nextRoom].y);
+	distanceNext = sqrt(distanceNext);
+
+	float distancePre;
+	distancePre = (player.x - m_roomPosition[previousRoom].x) * (player.x - m_roomPosition[previousRoom].x) + (player.y - m_roomPosition[previousRoom].y) + (player.y - m_roomPosition[previousRoom].y);
+	distancePre = sqrt(distancePre);
+
+	if (distanceNext >= distancePre) {
+		m_target = m_roomPosition[m_nextRoom];
+	}
+	else {
+		m_target = m_roomPosition[previousRoom];
+	}
+
 	float distanceX = player.x - position.x;
 	float distanceY = player.y - position.y;
 	float x = 0;
@@ -192,7 +206,6 @@ void sweeper::flee(sf::Vector2f player, float t) {
 	}
 
 	float targetRotation = targetRadian * 180 / PI;
-	targetRotation += 180;
 
 	if (rotation < targetRotation)
 	{
@@ -238,16 +251,18 @@ void sweeper::flee(sf::Vector2f player, float t) {
 
 	position.x += velocity.x * t;
 	position.y += velocity.y * t;
+
+
 }
 
 /*
 the object will follow the player position
 the player position could be pursued
 */
-void sweeper::seek(sf::Vector2f player, float t)
+void sweeper::seek(sf::Vector2f worker, float t)
 {
-	float distanceX = player.x - position.x;
-	float distanceY = player.y - position.y;
+	float distanceX = worker.x - position.x;
+	float distanceY = worker.y - position.y;
 	float x = 0;
 	float targetRadian = atan(x);
 
@@ -309,5 +324,4 @@ void sweeper::seek(sf::Vector2f player, float t)
 void sweeper::render(sf::RenderWindow& window) {
 	window.draw(m_sprite);
 	window.draw(m_triangle);
-	window.draw(m_behaviour);
 }

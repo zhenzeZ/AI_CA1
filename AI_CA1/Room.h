@@ -8,6 +8,7 @@ public:
 	~room();
 
 	bool isPlayerInRoom(sf::Vector2f playerSize, sf::Vector2f playerPosition);
+
 	void render(sf::RenderWindow& m_window);
 
 	sf::Vector2i getSize() { return sf::Vector2i(m_size); }

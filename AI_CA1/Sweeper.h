@@ -15,10 +15,12 @@ using namespace std;
 
 class sweeper {
 public:
-	sweeper(sf::Vector2f start, AIStates state);
+	sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current);
 	~sweeper();
-	void update(sf::Vector2f worker, float t);
+	void update(sf::Vector2f player, sf::Vector2f worker , float t);
 	void render(sf::RenderWindow& window);
+
+	void inPlayerSight() { m_aiStates = AIStates::Flee; }
 
 private:
 	AIStates m_aiStates;
@@ -41,17 +43,21 @@ private:
 
 	sf::Vector2f m_target;
 
-	sf::Font m_font;
-	sf::Text m_behaviour;
-
 	float radius;
 
 	float viewAngle;
 	float viewRange;
 
-	void seek(sf::Vector2f player, float t);
-	void wander(sf::Vector2f player, float t);
+	int m_worker;
+
+	vector<sf::Vector2f> m_roomPosition;
+	int m_currentRoom;
+	int m_nextRoom;
+	int previousRoom;
+
+	void seek(sf::Vector2f worker, float t);
+	void wander(sf::Vector2f target, float t);
 	void flee(sf::Vector2f player, float t);
 
-	void vision(sf::Vector2f player);
+	void vision(sf::Vector2f worker);
 };

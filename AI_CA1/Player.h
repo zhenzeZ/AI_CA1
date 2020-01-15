@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <iostream>
 
 class player {
 public:
@@ -11,14 +12,20 @@ public:
 
 	void saveWorker() { m_workerSaved++; }
 
+	void playerInTheRoom() { m_playerInRoom = true; }
+
 	sf::Vector2f playerPosition() { return position; } // return current positon
 	sf::Vector2f playerSize() { return size; }
 	sf::Vector2f pursuePosition() { return pursue; } // return pursue position
 
 	float playerRadian() { return radian; }
 
+	sf::FloatRect boundingBox();
+
 	void buttonCheck();
 private:
+	void bounceOff();
+
 	float acceleration;
 	float rotation;
 	float radian;
@@ -39,7 +46,12 @@ private:
 
 	sf::View m_view;
 
+	sf::Font m_font;
+	sf::Text m_workers;
+
 	bool accelerating;
+
+	bool m_playerInRoom;
 
 	//sf::Vector2f motion;
 	//sf::Vector2f m_acceleration;

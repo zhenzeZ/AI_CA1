@@ -25,7 +25,7 @@ Game::Game() :
 	setupMap(); // load font 
 	setupWorkers(); // load texture
 
-	m_player = new player(sf::Vector2f(600, 200));
+	m_player = new player(sf::Vector2f(600, 300));
 }
 
 /// <summary>
@@ -126,6 +126,12 @@ void Game::update(sf::Time t_deltaTime)
 
 	m_player->update(t_deltaTime.asSeconds());
 
+	for (int i = 0; i < m_rooms.size(); i++) {
+		if (m_rooms[i]->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
+			m_player->playerInTheRoom();
+		}
+	}
+
 	for (int i = 0; i < m_workers.size(); i++) {
 		m_workers[i]->update(t_deltaTime.asSeconds());
 		if (m_workers[i]->catchCheck(m_player->playerPosition())) {
@@ -170,31 +176,40 @@ void Game::render()
 /// </summary>
 void Game::setupMap()
 {
-	m_numOfRoom = 8;
+	m_numOfRoom = 0;
 
-	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(500, 500)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(500, 500));
+	m_roomSize.push_back(sf::Vector2f(600, 600));
 
-	m_room = new room(sf::Vector2f(300, 400), sf::Vector2f(500, 0)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(500, 0));
+	m_roomSize.push_back(sf::Vector2f(300, 550));
 
-	m_room = new room(sf::Vector2f(1000, 1000), sf::Vector2f(500, -700)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(500, -700));
+	m_roomSize.push_back(sf::Vector2f(1000, 1000));
 
-	m_room = new room(sf::Vector2f(800, 300), sf::Vector2f(-400, -700)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(-400, -700));
+	m_roomSize.push_back(sf::Vector2f(950, 300));
 
-	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(-1100, -700)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(-1100, -700));
+	m_roomSize.push_back(sf::Vector2f(600, 600));
 
-	m_room = new room(sf::Vector2f(300, 400), sf::Vector2f(-1100, -200)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(-1100, -200));
+	m_roomSize.push_back(sf::Vector2f(300, 550));
 
-	m_room = new room(sf::Vector2f(1000, 1000), sf::Vector2f(-1100, 500)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(-1100, 500));
+	m_roomSize.push_back(sf::Vector2f(1000, 1000));
 
-	m_room = new room(sf::Vector2f(800, 300), sf::Vector2f(-200, 500)); // size and position
-	m_rooms.push_back(m_room);
+	m_roomPosition.push_back(sf::Vector2f(-200, 500));
+	m_roomSize.push_back(sf::Vector2f(950, 300));
+	
+
+	for (int i = 0; i < m_roomPosition.size(); i++) {
+		m_room = new room(m_roomSize[i], m_roomPosition[i]); // size and position
+		m_rooms.push_back(m_room);
+		m_numOfRoom++;
+	}
+
+	cout << m_numOfRoom << endl;
 }
 
 /// <summary>

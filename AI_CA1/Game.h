@@ -48,6 +48,9 @@ private:
 	vector<bullet*> m_bullets;
 	vector<room*> m_rooms;
 
+	vector<sf::Vector2f> m_roomPosition;
+	vector<sf::Vector2f> m_roomSize;
+
 	bool m_exitGame; // control exiting game
 	
 	int m_numOfRoom; // number of rooms in the map
