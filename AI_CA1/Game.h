@@ -30,7 +30,11 @@ public:
 	void run();
 
 private:
-
+	// the game view (full window)
+	sf::View gameView; 
+	
+	// mini-map (upper-right corner)
+	sf::View minimapView; 
 	void processEvents();
 	void processKeys(sf::Event t_event);
 	void update(sf::Time t_deltaTime);

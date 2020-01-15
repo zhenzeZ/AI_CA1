@@ -24,6 +24,9 @@ Game::Game() :
 	m_player = new player(sf::Vector2f(600, 500));
 	m_alienNest = new AlienNest(*m_player);
 	m_alienNest2 = new AlienNest(*m_player);
+
+	gameView.setViewport(sf::FloatRect(0, 0, 1, 1)); // fullscreen
+	minimapView.setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f)); 
 }
 
 /// <summary>
@@ -160,6 +163,21 @@ void Game::render()
 	}
 
 	m_player->render(m_window);
+
+	//m_window.setView(minimapView);
+	//sf::CircleShape object;
+	//object.setRadius(200);
+	//object.setFillColor(sf::Color::Blue);
+	//object.setPosition(m_player->playerPosition());
+	//m_window.draw(object);
+	//object.setFillColor(sf::Color::Red);
+	////for (auto& e : enemies)
+	//{
+	//	//object.setPosition(e->getPosition());
+	//	//window.draw(object);
+	//}
+
+	//m_window.setView(gameView);
 
 	m_window.display();
 }
