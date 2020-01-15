@@ -21,10 +21,11 @@ Game::Game() :
 	m_exitGame{ false } //when true game will exit
 {
 
+
 	setupMap(); // load font 
 	setupWorkers(); // load texture
 
-	m_player = new player(sf::Vector2f(600, 500));
+	m_player = new player(sf::Vector2f(600, 200));
 }
 
 /// <summary>
@@ -169,13 +170,30 @@ void Game::render()
 /// </summary>
 void Game::setupMap()
 {
+	m_numOfRoom = 8;
+
 	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(500, 500)); // size and position
 	m_rooms.push_back(m_room);
 
-	m_room = new room(sf::Vector2f(200, 400), sf::Vector2f(500, 0)); // size and position
+	m_room = new room(sf::Vector2f(300, 400), sf::Vector2f(500, 0)); // size and position
 	m_rooms.push_back(m_room);
 
 	m_room = new room(sf::Vector2f(1000, 1000), sf::Vector2f(500, -700)); // size and position
+	m_rooms.push_back(m_room);
+
+	m_room = new room(sf::Vector2f(800, 300), sf::Vector2f(-400, -700)); // size and position
+	m_rooms.push_back(m_room);
+
+	m_room = new room(sf::Vector2f(600, 600), sf::Vector2f(-1100, -700)); // size and position
+	m_rooms.push_back(m_room);
+
+	m_room = new room(sf::Vector2f(300, 400), sf::Vector2f(-1100, -200)); // size and position
+	m_rooms.push_back(m_room);
+
+	m_room = new room(sf::Vector2f(1000, 1000), sf::Vector2f(-1100, 500)); // size and position
+	m_rooms.push_back(m_room);
+
+	m_room = new room(sf::Vector2f(800, 300), sf::Vector2f(-200, 500)); // size and position
 	m_rooms.push_back(m_room);
 }
 
@@ -184,6 +202,12 @@ void Game::setupMap()
 /// </summary>
 void Game::setupWorkers()
 {
-	m_worker = new worker(sf::Vector2f(300, 300));
-	m_workers.push_back(m_worker);
+	m_maxWorker = 10;
+
+	for (int i = 0; i < m_maxWorker; i++) {
+
+		int spawnRoom = std::rand() % m_numOfRoom;
+		m_worker = new worker(m_rooms[spawnRoom]->getOrigin(), m_rooms[spawnRoom]->getPosition(), m_rooms[spawnRoom]->getSize());
+		m_workers.push_back(m_worker);
+	}
 }

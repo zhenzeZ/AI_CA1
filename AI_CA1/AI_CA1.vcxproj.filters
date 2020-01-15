@@ -30,6 +30,9 @@
     <ClInclude Include="Bullet.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Sweeper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -48,6 +51,9 @@
       <Filter>资源文件</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
+      <Filter>资源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Sweeper.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>

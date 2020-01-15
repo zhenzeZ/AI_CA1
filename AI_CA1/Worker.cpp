@@ -1,16 +1,18 @@
 #include "Worker.h"
 
-worker::worker(sf::Vector2f start) :
+worker::worker(sf::Vector2f start, sf::Vector2f position, sf::Vector2i range) :
 	PI(atan(1) * 4),
 	position(start),
 	rotation(0),
 	radian(rotation* PI / 180),
 	speed(150),
 	radius(150.0f),
-	m_target(sf::Vector2f(rand() % 800, rand() % 600)),
+	m_randomOrigin(position),
+	m_randomRange(range),
 	viewAngle(50),
 	viewRange(150.0f)
 {
+	m_target = sf::Vector2f(rand() % range.x + position.x, rand() % range.y + position.y);
 
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/worker.png"))
 	{
@@ -105,8 +107,8 @@ void worker::wander(sf::Vector2f player, float t) {
 
 	float distance = (player.x - position.x) * (player.x - position.x) + (player.y - position.y) + (player.y - position.y);
 	distance = sqrt(distance);
-	if (distance < 50.0f) {
-		m_target = sf::Vector2f(rand() % 800, rand() % 600);
+	if (distance < 10.0f) {
+		m_target = sf::Vector2f(rand() % m_randomRange.x + m_randomOrigin.x, rand() % m_randomRange.y + m_randomOrigin.y);
 	}
 }
 

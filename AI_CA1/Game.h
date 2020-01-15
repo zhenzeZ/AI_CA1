@@ -49,7 +49,9 @@ private:
 	vector<room*> m_rooms;
 
 	bool m_exitGame; // control exiting game
-
+	
+	int m_numOfRoom; // number of rooms in the map
+	int m_maxWorker; // max number of worker
 };
 
 #endif // !GAME_HPP
