@@ -130,6 +130,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Kinematic.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Predator.h" />
     <ClInclude Include="Room.h" />
     <ClInclude Include="Worker.h" />
   </ItemGroup>
