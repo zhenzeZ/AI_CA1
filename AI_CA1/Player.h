@@ -23,6 +23,8 @@ public:
 	sf::FloatRect boundingBox();
 
 	void buttonCheck();
+
+	float m_fireRate;
 private:
 	void bounceOff();
 
@@ -35,7 +37,9 @@ private:
 	float speed;
 	float pursueTime;
 
-	float m_workerSaved;
+	int m_workerSaved;
+	float m_health;
+	float m_energy;
 
 	sf::Vector2f velocity;
 	sf::Vector2f moveDistance;

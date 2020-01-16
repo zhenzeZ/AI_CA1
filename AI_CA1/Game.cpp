@@ -110,10 +110,12 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_player->m_fireRate <= 0)
 	{
 		// fire a bullet
+
 		m_bullets.push_back(new bullet(m_player->playerPosition(), m_player->playerRadian()));
+		m_player->m_fireRate = 0.2f;
 	}
 
 	for (int i = 0; i < m_bullets.size(); i++) {

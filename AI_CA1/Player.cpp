@@ -10,7 +10,11 @@ player::player(sf::Vector2f start) :
 	position(start),
 	speed(0),
 	pursueTime(0.5),
-	m_playerInRoom(false)
+	m_fireRate(0.0f),
+	m_playerInRoom(false),
+	m_workerSaved(0.0f),
+	m_health(100.0f),
+	m_energy(50.0f)
 {
 
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/player.png"))
@@ -51,6 +55,10 @@ void player::update(float t) {
 	buttonCheck();
 
 	movementCalculate(t);
+
+	if (m_fireRate > 0) {
+		m_fireRate -= t;
+	}
 
 	if (!accelerating) {
 		speed *= 0.98;

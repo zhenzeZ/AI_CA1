@@ -16,6 +16,7 @@
 #include "Player.h"
 #include "Room.h"
 #include "Worker.h"
+#include "Sweeper.h"
 #include "Bullet.h"
 
 class Game
@@ -43,10 +44,12 @@ private:
 	player* m_player;
 	room* m_room;
 	worker* m_worker;
+	sweeper* m_sweeper;
 
 	vector<worker*> m_workers; 
 	vector<bullet*> m_bullets;
 	vector<room*> m_rooms;
+	vector<sweeper*> m_sweepers;
 
 	vector<sf::Vector2f> m_roomPosition;
 	vector<sf::Vector2f> m_roomSize;
