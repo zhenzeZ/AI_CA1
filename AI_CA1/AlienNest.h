@@ -15,6 +15,7 @@ public:
 	void update(float t);
 	void render(sf::RenderWindow& window);
 	sf::FloatRect boundingBox();
+	sf::FloatRect missileBoundingBox();
 	void damage();
 
 private:

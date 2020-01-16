@@ -14,7 +14,7 @@ static const float ONE_RAD = 180 / PI;
 class Kinematic 
 {
 public:
-	float static getNewOrientation(float t_orientation, sf::Vector2f t_velocity);
+	float static getNewOrientation(sf::Vector2f t_position1, sf::Vector2f t_position2);
 	float static vectorLength(sf::Vector2f t_velocity);
 	float static toDegrees(float t_rads);
 	void static screenWrap(sf::Vector2f& t_position);

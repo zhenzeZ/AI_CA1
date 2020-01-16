@@ -55,7 +55,7 @@ void AlienNest::update(float t)
 		dynamicPursue(t / 1000);
 		m_missileSprite.setPosition(m_missilePosition);
 		m_missilePosition += m_missileVelocity;
-		m_missileSprite.setRotation(m_orientation);
+		m_missileSprite.setRotation(m_orientation * 2);
 	}
 }
 
@@ -82,6 +82,8 @@ void AlienNest::fire()
 		throw std::exception(s.c_str());
 	} // loading image check
 	m_missileSprite.setTexture(m_missileTexture);
+	m_missileSprite.setOrigin(sf::Vector2f(m_missileTexture.getSize().x / 2, m_missileTexture.getSize().y / 2));
+
 	m_isMissileAlive = true;
 }
 
@@ -105,7 +107,7 @@ void AlienNest::kinematicSeek(float t_deltaTime, sf::Vector2f& t_newTarget) {
 	m_missileVelocity = m_targetPosition - m_missilePosition;
 	m_missileVelocity = m_missileVelocity / Kinematic::vectorLength(m_missileVelocity) ;
 	m_missileVelocity *= MAX_VELOCITY;
-	m_orientation = Kinematic::getNewOrientation(m_orientation, m_missileVelocity);
+	m_orientation = Kinematic::getNewOrientation(m_missilePosition, m_player.playerPosition());
 }
 
 sf::FloatRect AlienNest::boundingBox()
@@ -115,6 +117,16 @@ sf::FloatRect AlienNest::boundingBox()
 		m_sprite.getGlobalBounds().top + 10,
 		m_sprite.getGlobalBounds().width - 10,
 		m_sprite.getGlobalBounds().height - 10);
+	return boundingBox;
+}
+
+sf::FloatRect AlienNest::missileBoundingBox()
+{
+	//bounding box for collision
+	sf::FloatRect boundingBox(m_missileSprite.getGlobalBounds().left + 10,
+		m_missileSprite.getGlobalBounds().top + 10,
+		m_missileSprite.getGlobalBounds().width - 10,
+		m_missileSprite.getGlobalBounds().height - 10);
 	return boundingBox;
 }
 

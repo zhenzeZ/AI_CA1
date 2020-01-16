@@ -1,15 +1,8 @@
 #include "Kinematic.h"
 
-float Kinematic::getNewOrientation(float t_orientation, sf::Vector2f t_velocity)
+float Kinematic::getNewOrientation(sf::Vector2f t_position1, sf::Vector2f t_position2)
 {
-	if (vectorLength(t_velocity) > 0)
-	{
-		return toDegrees(atan2(-t_velocity.x, t_velocity.y));
-	}
-	else
-	{
-		return t_orientation;
-	}
+	return toDegrees(atan2(-t_position2.y - t_position1.y, t_position2.x - t_position1.x));
 }
 
 float Kinematic::vectorLength(sf::Vector2f t_velocity)
@@ -19,7 +12,7 @@ float Kinematic::vectorLength(sf::Vector2f t_velocity)
 
 float Kinematic::toDegrees(float t_rads)
 {
-	return t_rads * PI / 180;
+	return t_rads * 180 / PI;
 }
 
 void Kinematic::screenWrap(sf::Vector2f& t_position)

@@ -140,6 +140,9 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	m_player->update(t_deltaTime.asSeconds());
+	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox()) || m_player->boundingBox().intersects(m_alienNest2->missileBoundingBox())) {
+		std::cout << "Player hit" << std::endl;
+	}
 
 	for (int i = 0; i < m_workers.size(); i++) {
 		m_workers[i]->update(t_deltaTime.asSeconds());

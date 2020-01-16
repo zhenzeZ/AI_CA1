@@ -20,6 +20,7 @@ public:
 
 	void buttonCheck();
 	float getMaxSpeed() { return maxSpeed; }
+	sf::FloatRect boundingBox();
 private:
 	float acceleration;
 	float rotation;

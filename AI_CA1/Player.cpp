@@ -103,3 +103,15 @@ void player::render(sf::RenderWindow& window) {
 
 	window.draw(m_sprite);
 }
+
+
+sf::FloatRect player::boundingBox()
+{
+	//bounding box for collision
+	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,
+		m_sprite.getGlobalBounds().top + 10,
+		m_sprite.getGlobalBounds().width - 10,
+		m_sprite.getGlobalBounds().height - 10);
+	return boundingBox;
+}
+
