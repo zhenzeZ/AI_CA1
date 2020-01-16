@@ -38,8 +38,6 @@ private:
 
 	sf::Vector2f pursue;
 
-	sf::View m_view;
-
 	bool accelerating;
 
 	//sf::Vector2f motion;

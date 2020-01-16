@@ -26,7 +26,9 @@ Game::Game() :
 	m_alienNest2 = new AlienNest(*m_player);
 
 	gameView.setViewport(sf::FloatRect(0, 0, 1, 1)); // fullscreen
+	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
 	minimapView.setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f)); 
+	m_window.setView(gameView);
 }
 
 /// <summary>
@@ -112,6 +114,9 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
+	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
+
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
 		// fire a bullet
@@ -164,20 +169,23 @@ void Game::render()
 
 	m_player->render(m_window);
 
-	//m_window.setView(minimapView);
-	//sf::CircleShape object;
-	//object.setRadius(200);
-	//object.setFillColor(sf::Color::Blue);
-	//object.setPosition(m_player->playerPosition());
-	//m_window.draw(object);
-	//object.setFillColor(sf::Color::Red);
-	////for (auto& e : enemies)
-	//{
-	//	//object.setPosition(e->getPosition());
-	//	//window.draw(object);
-	//}
+	m_window.setView(minimapView);
+	sf::RectangleShape border(minimapView.getSize());
+	border.setFillColor(sf::Color::Red);
+	m_window.draw(border);
+	sf::CircleShape object;
+	object.setRadius(20);
+	object.setFillColor(sf::Color::Blue);
+	object.setPosition(m_player->playerPosition());
+	m_window.draw(object);
+	object.setFillColor(sf::Color::Red);
+	//for (auto& e : enemies)
+	{
+		//object.setPosition(e->getPosition());
+		//window.draw(object);
+	}
 
-	//m_window.setView(gameView);
+	m_window.setView(gameView);
 
 	m_window.display();
 }
