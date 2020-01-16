@@ -4,18 +4,22 @@
 #include <iostream>
 #include "Player.h"
 #include "Kinematic.h"
+#include <cmath>
 
 using namespace std;
 
 class AlienNest {
 public:
-	AlienNest(player& player);
+	AlienNest(player& player, sf::Vector2f t_position);
 	~AlienNest();
 	void update(float t);
 	void render(sf::RenderWindow& window);
-
+	sf::FloatRect boundingBox();
+	void damage();
 
 private:
+	bool m_isAlive;
+	player& m_player;
 	const short MAX_TIME_PRED = 1000; // ms
 
 	sf::Vector2f m_targetPosition;
@@ -24,9 +28,8 @@ private:
 
 	bool m_isMissileAlive;
 	int m_health;
-	int m_missileTTL;
+	float m_missileTTL;
 	float m_missileSpeed;
-	float rotation;
 	float radian;
 	float PI;
 
@@ -37,6 +40,8 @@ private:
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
+	sf::Texture m_missileTexture;
+	sf::Sprite m_missileSprite;
 
 	sf::Vector2f m_target;
 
@@ -45,7 +50,7 @@ private:
 	float viewAngle;
 	float viewRange;
 
-	void fire(sf::Vector2f player, float t);
-	void dynamicPursue(float t_deltaTime, sf::Vector2f& t_playerPos, sf::Vector2f& t_playerVelo);
-	void kinematicSeek(float t_deltaTime, sf::Vector2f& t_playerPos);
+	void fire();
+	void dynamicPursue(float t_deltaTime);
+	void kinematicSeek(float t_deltaTime, sf::Vector2f& t_newTarget);
 };

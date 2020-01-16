@@ -22,8 +22,8 @@ Game::Game() :
 	setupWorkers(); // load texture
 
 	m_player = new player(sf::Vector2f(600, 500));
-	m_alienNest = new AlienNest(*m_player);
-	m_alienNest2 = new AlienNest(*m_player);
+	m_alienNest = new AlienNest(*m_player, sf::Vector2f{300, -400});
+	m_alienNest2 = new AlienNest(*m_player, sf::Vector2f{ 400, 750 });
 
 	gameView.setViewport(sf::FloatRect(0, 0, 1, 1)); // fullscreen
 	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
@@ -114,8 +114,10 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
-	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
+	m_alienNest->update(t_deltaTime.asSeconds());
+	m_alienNest2->update(t_deltaTime.asSeconds());
 
+	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 	{
@@ -125,6 +127,12 @@ void Game::update(sf::Time t_deltaTime)
 
 	for (int i = 0; i < m_bullets.size(); i++) {
 		m_bullets[i]->update(t_deltaTime.asSeconds());
+		if (m_bullets[i]->boundingBox().intersects(m_alienNest->boundingBox())) {
+			m_alienNest->damage();
+		}
+		if (m_bullets[i]->boundingBox().intersects(m_alienNest2->boundingBox())) {
+			m_alienNest2->damage();
+		}
 
 		if (!m_bullets[i]->checkAlive()) {
 			m_bullets.erase(m_bullets.begin() + i);
@@ -168,10 +176,11 @@ void Game::render()
 	}
 
 	m_player->render(m_window);
-
+	m_alienNest->render(m_window);
+	m_alienNest2->render(m_window);
 	m_window.setView(minimapView);
 	sf::RectangleShape border(minimapView.getSize());
-	border.setFillColor(sf::Color::Red);
+	border.setFillColor(sf::Color::Red); // temp colour
 	m_window.draw(border);
 	sf::CircleShape object;
 	object.setRadius(20);
