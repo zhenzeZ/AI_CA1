@@ -68,7 +68,6 @@ void player::movementCalculate(float t) {
 	position.y += velocity.y * t;
 
 	pursue = position + velocity * pursueTime;
-
 }
 
 /*

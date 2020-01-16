@@ -3,7 +3,11 @@
 AlienNest::AlienNest(player& t_player, sf::Vector2f t_position) :
 	m_player(t_player),
 	m_isAlive{true},
-	m_isMissileAlive{false}
+	m_isMissileAlive{false},
+	m_missileVelocity{ -MAX_VELOCITY, 0.0f },
+	m_orientation{ 0.0f },
+	m_targetPosition{ 0.0f, 0.0f }
+
 {
 	m_health = 4; // four hits from player 
 	m_missileSpeed = t_player.getMaxSpeed();
@@ -48,11 +52,11 @@ void AlienNest::update(float t)
 			m_isMissileAlive = false;
 			m_missileTTL = 5;
 		}
-		dynamicPursue(t);
+		dynamicPursue(t / 1000);
 		m_missileSprite.setPosition(m_missilePosition);
 		m_missilePosition += m_missileVelocity;
+		m_missileSprite.setRotation(m_orientation);
 	}
-
 }
 
 void AlienNest::render(sf::RenderWindow& window)
@@ -99,8 +103,9 @@ void AlienNest::dynamicPursue(float t_deltaTime) {
 void AlienNest::kinematicSeek(float t_deltaTime, sf::Vector2f& t_newTarget) {
 	m_targetPosition = t_newTarget;
 	m_missileVelocity = m_targetPosition - m_missilePosition;
-	m_missileVelocity = m_missileVelocity / Kinematic::vectorLength(m_missileVelocity) * t_deltaTime;
+	m_missileVelocity = m_missileVelocity / Kinematic::vectorLength(m_missileVelocity) ;
 	m_missileVelocity *= MAX_VELOCITY;
+	m_orientation = Kinematic::getNewOrientation(m_orientation, m_missileVelocity);
 }
 
 sf::FloatRect AlienNest::boundingBox()

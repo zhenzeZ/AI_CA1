@@ -25,6 +25,7 @@ private:
 	sf::Vector2f m_targetPosition;
 	sf::Vector2f m_missilePosition;
 	sf::Vector2f m_missileVelocity;
+	float m_orientation;
 
 	bool m_isMissileAlive;
 	int m_health;

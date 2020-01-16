@@ -4,7 +4,7 @@
 #include <cmath>
 // base level consts, consider moving to own file
 static const float SPRITE_QUARTER = 142.0f / 4.0f;
-static const float MAX_VELOCITY = 0.5f;
+static const float MAX_VELOCITY = 3.0f;
 static const float MIN_VELOCITY = 0.05f;
 static const float ROTATION_CHANGE = 6.0f;
 static const unsigned int SCR_W = sf::VideoMode::getDesktopMode().width;
