@@ -9,7 +9,7 @@ using namespace std;
 
 class Predator {
 public:
-	Predator(player& player, sf::Vector2f t_position);
+	Predator(Player& player, sf::Vector2f t_position);
 	~Predator();
 	void update(float t);
 	void render(sf::RenderWindow& window);
@@ -24,7 +24,7 @@ private:
 	bool m_inRoom;
 	float timer;*/
 
-	player& m_player;
+	Player& m_player;
 	const short MAX_TIME_PRED = 1000; // ms
 
 	sf::Vector2f m_targetPosition;

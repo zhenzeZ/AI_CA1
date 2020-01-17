@@ -1,6 +1,6 @@
 #include "AlienNest.h"
 
-AlienNest::AlienNest(player& t_player, sf::Vector2f t_position) :
+AlienNest::AlienNest(Player& t_player, sf::Vector2f t_position) :
 	m_player(t_player),
 	m_isAlive{true},
 	m_isMissileAlive{false},
@@ -71,7 +71,7 @@ void AlienNest::update(float t)
 	for (auto p : m_predators) {
 		p->update(t);
 		if (m_player.boundingBox().intersects(p->boundingBox())) {
-			m_player.damage(1);
+			m_player.damage(0.1f);
 		}
 	}
 }
@@ -162,6 +162,7 @@ bool AlienNest::erasePredators(sf::FloatRect bullet)
 	for (int i = 0; i < m_predators.size(); i ++) {
 		if (bullet.intersects(m_predators[i]->boundingBox())) {
 			m_predators.erase(m_predators.begin() + i);
+			m_noOfPredators--;
 			return true;
 		}
 	}

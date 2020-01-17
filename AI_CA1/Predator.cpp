@@ -1,6 +1,6 @@
 #include "Predator.h"
 
-Predator::Predator(player& player, sf::Vector2f t_position) :
+Predator::Predator(Player& player, sf::Vector2f t_position) :
 	m_player{player}
 {
 	//timer = 0;

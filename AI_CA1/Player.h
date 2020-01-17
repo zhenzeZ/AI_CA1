@@ -3,10 +3,10 @@
 #include <math.h>
 #include <iostream>
 
-class player {
+class Player {
 public:
-	player(sf::Vector2f start, sf::Font font);
-	~player();
+	Player(sf::Vector2f start, sf::Font font);
+	~Player();
 	void update(float t);
 	void render(sf::RenderWindow& window);
 
@@ -33,7 +33,7 @@ public:
 	float m_fireRate;
 
 	float getMaxSpeed() { return maxSpeed; }
-	void damage(int t_damage);
+	void damage(float t_damage);
 	int getWorkersSaved() { return m_workerSaved; }
 private:
 	void bounceOff();

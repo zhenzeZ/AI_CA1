@@ -28,7 +28,7 @@ Game::Game() :
 	setupWorkers(); // spawn workers
 	setUpSweeper(); // spawn sweeper
 
-	m_player = new player(sf::Vector2f(600, 300), m_font);
+	m_player = new Player(sf::Vector2f(600, 300), m_font);
 	m_alienNest = new AlienNest(*m_player, sf::Vector2f{300, -400});
 	m_alienNest2 = new AlienNest(*m_player, sf::Vector2f{ 400, 750 });
 

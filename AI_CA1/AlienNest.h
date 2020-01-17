@@ -11,7 +11,7 @@ using namespace std;
 
 class AlienNest {
 public:
-	AlienNest(player& player, sf::Vector2f t_position);
+	AlienNest(Player& player, sf::Vector2f t_position);
 	~AlienNest();
 	void update(float t);
 	void render(sf::RenderWindow& window);
@@ -29,7 +29,7 @@ private:
 	int m_noOfPredators;
 	const int MAX_PREDATORS = 2;
 	bool m_isAlive;
-	player& m_player;
+	Player& m_player;
 	const short MAX_TIME_PRED = 1000; // ms
 
 	sf::Vector2f m_targetPosition;

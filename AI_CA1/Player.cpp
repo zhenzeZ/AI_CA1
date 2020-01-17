@@ -1,6 +1,6 @@
 #include "Player.h"
 
-player::player(sf::Vector2f start, sf::Font font) :
+Player::Player(sf::Vector2f start, sf::Font font) :
 	PI(acos(-1)),
 	m_font(font),
 	acceleration(0),
@@ -48,11 +48,11 @@ player::player(sf::Vector2f start, sf::Font font) :
 	size = sf::Vector2f(m_texture.getSize());
 }
 
-player::~player() {
+Player::~Player() {
 
 }
 
-void player::setUpShape()
+void Player::setUpShape()
 {
 	for (int i = 0; i < 2; i++)
 	{
@@ -63,7 +63,7 @@ void player::setUpShape()
 	m_HealthBar[0].setOutlineThickness(3);
 	m_HealthBar[0].setOutlineColor(sf::Color::Yellow);
 }
-void player::setUpText() {
+void Player::setUpText() {
 	m_ammoText.setFont(m_font);
 	//m_ammoText.setFillColor(sf::Color::Blue);
 	m_ammoText.setOutlineColor(sf::Color::White);
@@ -85,7 +85,7 @@ void player::setUpText() {
 
 }
 
-void player::update(float t) {
+void Player::update(float t) {
 
 	bounceOff(); // when player running out the room
 
@@ -153,7 +153,7 @@ void player::update(float t) {
 	m_playerInRoom = false;
 }
 
-void player::movementCalculate(float t) {
+void Player::movementCalculate(float t) {
 	radian = rotation * PI / 180;
 
 	speed = speed + acceleration * t;
@@ -175,14 +175,14 @@ void player::movementCalculate(float t) {
 	pursue = position + velocity * pursueTime;
 }
 
-void player::damage(int t_damage)
+void Player::damage(float t_damage)
 {
 	if (!m_barrierOn) {
 		m_health-= t_damage;
 	}
 }
 
-void player::bounceOff() {
+void Player::bounceOff() {
 	if (!m_playerInRoom) {
 		speed = -speed * 0.5f;
 
@@ -193,7 +193,7 @@ void player::bounceOff() {
 /*
 turn around, speed up and speed down with button pressed
 */
-void player::buttonCheck() {
+void Player::buttonCheck() {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		acceleration = 150.0f;
@@ -224,7 +224,7 @@ void player::buttonCheck() {
 /// or active the barrier for player, and player won't take damage when barrier is on
 /// </summary>
 /// <param name="itemStyle"></param>
-void player::powerUps(int itemStyle) {
+void Player::powerUps(int itemStyle) {
 	switch (itemStyle)
 	{
 	case 1:
@@ -242,7 +242,7 @@ void player::powerUps(int itemStyle) {
 	}
 }
 
-void player::render(sf::RenderWindow& window) {
+void Player::render(sf::RenderWindow& window) {
 
 	window.draw(m_sprite);
 
@@ -265,7 +265,7 @@ void player::render(sf::RenderWindow& window) {
 
 }
 
-sf::FloatRect player::boundingBox()
+sf::FloatRect Player::boundingBox()
 {
 	//bounding box for collision
 	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,

@@ -50,7 +50,7 @@ private:
 
 	AlienNest* m_alienNest;
 	AlienNest* m_alienNest2;
-	player* m_player;
+	Player* m_player;
 	room* m_room;
 	worker* m_worker;
 	sweeper* m_sweeper;
