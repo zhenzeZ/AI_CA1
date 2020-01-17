@@ -1,13 +1,10 @@
 /// <summary>
-/// @author Peter Lowe
-/// @date May 2019
+/// @author Dion and Zhen
+/// @date Jan 2020
 ///
-/// you need to change the above lines or lose marks
 /// </summary>
-
 #include "Game.h"
 #include <iostream>
-
 
 
 /// <summary>
@@ -17,7 +14,7 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "AI-Lab6" },
+	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "CA1" },
 	m_exitGame{ false } //when true game will exit
 {
 	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
@@ -30,6 +27,13 @@ Game::Game() :
 	setUpSweeper(); // spawn sweeper
 
 	m_player = new player(sf::Vector2f(600, 300), m_font);
+	m_alienNest = new AlienNest(*m_player, sf::Vector2f{300, -400});
+	m_alienNest2 = new AlienNest(*m_player, sf::Vector2f{ 400, 750 });
+
+	gameView.setViewport(sf::FloatRect(0, 0, 1, 1)); // fullscreen
+	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
+	minimapView.setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f)); 
+	m_window.setView(gameView);
 }
 
 /// <summary>
@@ -69,6 +73,7 @@ void Game::run()
 		render(); // as many as possible
 	}
 }
+
 /// <summary>
 /// handle user and system events/ input
 /// get key presses/ mouse moves etc. from OS
@@ -114,6 +119,11 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
+	m_alienNest->update(t_deltaTime.asSeconds());
+	m_alienNest2->update(t_deltaTime.asSeconds());
+
+	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
+
 	/*fire a bullet and reduce the ammo value in player class*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
 		m_player->m_fireRate <= 0 &&
@@ -128,6 +138,12 @@ void Game::update(sf::Time t_deltaTime)
 
 	for (int i = 0; i < m_bullets.size(); i++) {
 		m_bullets[i]->update(t_deltaTime.asSeconds());
+		if (m_bullets[i]->boundingBox().intersects(m_alienNest->boundingBox())) {
+			m_alienNest->damage();
+		}
+		if (m_bullets[i]->boundingBox().intersects(m_alienNest2->boundingBox())) {
+			m_alienNest2->damage();
+		}
 
 		for (int x = 0; x < m_sweepers.size(); x++) {
 			if (m_bullets[i]->collisionCheck(m_sweepers[x]->boundingBox())) {
@@ -144,6 +160,9 @@ void Game::update(sf::Time t_deltaTime)
 
 	/* player movement*/
 	m_player->update(t_deltaTime.asSeconds());
+	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox()) || m_player->boundingBox().intersects(m_alienNest2->missileBoundingBox())) {
+		std::cout << "Player hit" << std::endl;
+	}
 
 	for (int i = 0; i < m_rooms.size(); i++) {
 		if (m_rooms[i]->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
@@ -175,11 +194,6 @@ void Game::update(sf::Time t_deltaTime)
 
 	}
 
-
-	/*if (m_room->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
-		m_player->buttonCheck();
-	}*/
-
 }
 
 /// <summary>
@@ -207,6 +221,25 @@ void Game::render()
 	}
 
 	m_player->render(m_window);
+	m_alienNest->render(m_window);
+	m_alienNest2->render(m_window);
+	m_window.setView(minimapView);
+	sf::RectangleShape border(minimapView.getSize());
+	border.setFillColor(sf::Color::Red); // temp colour
+	m_window.draw(border);
+	sf::CircleShape object;
+	object.setRadius(20);
+	object.setFillColor(sf::Color::Blue);
+	object.setPosition(m_player->playerPosition());
+	m_window.draw(object);
+	object.setFillColor(sf::Color::Red);
+	//for (auto& e : enemies)
+	{
+		//object.setPosition(e->getPosition());
+		//window.draw(object);
+	}
+
+	m_window.setView(gameView);
 
 	m_window.display();
 }

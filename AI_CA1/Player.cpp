@@ -36,8 +36,6 @@ player::player(sf::Vector2f start, sf::Font font) :
 
 	size = sf::Vector2f(m_texture.getSize());
 
-	m_view.setCenter(position); // set mid of screen to camera
-	m_view.setSize(sf::Vector2f(1000, 1000)); // set camera's size
 }
 
 player::~player() {
@@ -136,8 +134,6 @@ void player::movementCalculate(float t) {
 	position.y += velocity.y * t;
 
 	pursue = position + velocity * pursueTime;
-
-	m_view.setCenter(position); // set mid of screen to camera
 }
 
 void player::bounceOff() {
@@ -192,8 +188,6 @@ void player::powerUps(int itemStyle) {
 }
 
 void player::render(sf::RenderWindow& window) {
-
-	window.setView(m_view);
 
 	window.draw(m_sprite);
 

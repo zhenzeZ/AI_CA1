@@ -13,6 +13,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
+#include "AlienNest.h"
 #include "Player.h"
 #include "Room.h"
 #include "Worker.h"
@@ -31,7 +32,11 @@ public:
 	void run();
 
 private:
-
+	// the game view (full window)
+	sf::View gameView; 
+	
+	// mini-map (upper-right corner)
+	sf::View minimapView; 
 	void processEvents();
 	void processKeys(sf::Event t_event);
 	void update(sf::Time t_deltaTime);
@@ -44,6 +49,8 @@ private:
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_font; // font used by message
 
+	AlienNest* m_alienNest;
+	AlienNest* m_alienNest2;
 	player* m_player;
 	room* m_room;
 	worker* m_worker;

@@ -17,6 +17,7 @@ public:
 	sf::Vector2f playerPosition() { return position; } // return current positon
 	sf::Vector2f playerSize() { return size; }
 	sf::Vector2f pursuePosition() { return pursue; } // return pursue position
+	sf::Vector2f playerVelocity() { return velocity; } // return pursue position
 
 	float playerRadian() { return radian; }
 
@@ -29,6 +30,9 @@ public:
 	void powerUps(int itemStyle);
 
 	float m_fireRate;
+
+	float getMaxSpeed() { return maxSpeed; }
+
 private:
 	void bounceOff();
 
