@@ -144,6 +144,7 @@
     <ClCompile Include="Kinematic.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Predator.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="Sweeper.cpp" />
     <ClCompile Include="Worker.cpp" />

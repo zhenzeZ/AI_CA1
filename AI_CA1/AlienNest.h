@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Kinematic.h"
 #include <cmath>
+#include "Predator.h"
 
 using namespace std;
 
@@ -20,6 +21,10 @@ public:
 	sf::Vector2f getPosition() { return position; }
 	void destroyMissile();
 private:
+	float m_secondsPassed;
+	vector<Predator*> m_predators;
+	int m_noOfPredators;
+	const int MAX_PREDATORS = 3;
 	bool m_isAlive;
 	player& m_player;
 	const short MAX_TIME_PRED = 1000; // ms
