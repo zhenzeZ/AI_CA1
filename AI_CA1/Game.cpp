@@ -17,6 +17,7 @@ Game::Game() :
 	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "CA1" },
 	m_exitGame{ false } //when true game will exit
 {
+	m_window.setVerticalSyncEnabled(true);
 	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
 	{
 		std::cout << "problem loading arial black font" << std::endl;
@@ -123,6 +124,7 @@ void Game::update(sf::Time t_deltaTime)
 	m_alienNest2->update(t_deltaTime.asSeconds());
 
 	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
+	minimapView.setCenter(m_player->playerPosition()); // set mid of screen to camera
 
 	/*fire a bullet and reduce the ammo value in player class*/
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
@@ -138,13 +140,6 @@ void Game::update(sf::Time t_deltaTime)
 
 	for (int i = 0; i < m_bullets.size(); i++) {
 		m_bullets[i]->update(t_deltaTime.asSeconds());
-		if (m_bullets[i]->boundingBox().intersects(m_alienNest->boundingBox())) {
-			m_alienNest->damage();
-		}
-		if (m_bullets[i]->boundingBox().intersects(m_alienNest2->boundingBox())) {
-			m_alienNest2->damage();
-		}
-
 		for (int x = 0; x < m_sweepers.size(); x++) {
 			if (m_bullets[i]->collisionCheck(m_sweepers[x]->boundingBox())) {
 				m_player->saveWorker(m_sweepers[x]->getWorker());
@@ -152,9 +147,19 @@ void Game::update(sf::Time t_deltaTime)
 				m_bullets[i]->dead();
 			}
 		}
-
 		if (!m_bullets[i]->checkAlive()) {
 			m_bullets.erase(m_bullets.begin() + i);
+			break;
+		}
+		if (m_bullets[i]->boundingBox().intersects(m_alienNest->boundingBox())) {
+			m_alienNest->damage();
+			m_bullets.erase(m_bullets.begin() + i);
+			break;
+		}
+		else if (m_bullets[i]->boundingBox().intersects(m_alienNest2->boundingBox())) {
+			m_alienNest2->damage();
+			m_bullets.erase(m_bullets.begin() + i);
+			break;
 		}
 	}
 
@@ -176,6 +181,7 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_workers[i]->collisionCheck(m_player->boundingBox())) {
 			m_player->saveWorker(1);
 			m_workers.erase(m_workers.begin() + i);
+			break;
 		}
 
 		for (int x = 0; x < m_sweepers.size(); x++) {
@@ -184,6 +190,7 @@ void Game::update(sf::Time t_deltaTime)
 				m_workers.erase(m_workers.begin() + i);
 				m_sweepers[x]->catchWorker();
 				m_sweepers[x]->wanderState();
+				break;
 			}
 		}
 	}
@@ -223,10 +230,21 @@ void Game::render()
 	m_player->render(m_window);
 	m_alienNest->render(m_window);
 	m_alienNest2->render(m_window);
+
 	m_window.setView(minimapView);
 	sf::RectangleShape border(minimapView.getSize());
-	border.setFillColor(sf::Color::Red); // temp colour
+	border.setFillColor(sf::Color::Yellow); // temp colour
+	border.setOrigin(sf::Vector2f{ border.getSize().x / 2, border.getSize().y / 2 });
+	border.setPosition(m_player->playerPosition());
 	m_window.draw(border);
+	sf::RectangleShape walls;
+	walls.setFillColor(sf::Color::Black);
+	for (int i = 0; i < m_rooms.size(); i++) {
+		walls.setPosition(m_rooms[i]->getPosition());
+		walls.setSize(sf::Vector2f(m_rooms[i]->getSize()));
+		m_window.draw(walls);
+	}
+
 	sf::CircleShape object;
 	object.setRadius(20);
 	object.setFillColor(sf::Color::Blue);
@@ -234,10 +252,14 @@ void Game::render()
 	m_window.draw(object);
 	object.setFillColor(sf::Color::Red);
 	//for (auto& e : enemies)
-	{
-		//object.setPosition(e->getPosition());
-		//window.draw(object);
-	}
+	//{	
+	//}
+	object.setPosition(m_alienNest->getPosition());
+	m_window.draw(object);
+	object.setPosition(m_alienNest2->getPosition());
+	m_window.draw(object);
+
+
 
 	m_window.setView(gameView);
 
@@ -290,7 +312,7 @@ void Game::setupMap()
 /// </summary>
 void Game::setupWorkers()
 {
-	m_maxWorker = 1;
+	m_maxWorker = 15;
 
 	for (int i = 0; i < m_maxWorker; i++) {
 
@@ -305,7 +327,7 @@ void Game::setupWorkers()
 /// spawn the Sweeper
 /// </summary>
 void Game::setUpSweeper() {
-	m_maxSweeper = 1;
+	m_maxSweeper = 5;
 
 	for (int i = 0; i < m_maxSweeper; i++) {
 		//int spawnRoom = std::rand() % m_numOfRoom;
