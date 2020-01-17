@@ -23,6 +23,7 @@ public:
 
 	void ammoChanged(int ammo) { m_ammo += ammo; }
 	int getAmmo() { return m_ammo; }
+	int getHealth() { return m_health; }
 
 	sf::FloatRect boundingBox();
 
@@ -68,6 +69,8 @@ private:
 	sf::Text m_ammoText;
 	sf::Text m_workersText;
 
+	sf::Text m_gameoverText;
+
 	bool accelerating;
 
 	bool m_playerInRoom;
@@ -77,6 +80,11 @@ private:
 
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
+
+	sf::Texture m_barrierTexture;
+	sf::Sprite m_barrier;
+	bool m_barrierOn;
+	float m_barrierTimer;
 
 	void movementCalculate(float t);
 };

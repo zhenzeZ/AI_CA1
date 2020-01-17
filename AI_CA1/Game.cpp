@@ -70,7 +70,10 @@ void Game::run()
 		{
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
-			update(timePerFrame); //60 fps
+
+			if (m_player->getHealth() >= 0) {
+				update(timePerFrame); //60 fps
+			}
 		}
 		render(); // as many as possible
 	}
@@ -182,6 +185,7 @@ void Game::update(sf::Time t_deltaTime)
 
 	/* player movement*/
 	m_player->update(t_deltaTime.asSeconds());
+
 	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox())) {
 		m_player->damage();
 		m_alienNest->destroyMissile();
@@ -261,6 +265,10 @@ void Game::render()
 		m_sweepers[i]->render(m_window);
 	}
 
+	for (int i = 0; i < m_items.size(); i++) {
+		m_items[i]->render(m_window);
+	}
+
 	m_player->render(m_window);
 	m_alienNest->render(m_window);
 	m_alienNest2->render(m_window);
@@ -292,8 +300,6 @@ void Game::render()
 	m_window.draw(object);
 	object.setPosition(m_alienNest2->getPosition());
 	m_window.draw(object);
-
-
 
 	m_window.setView(gameView);
 

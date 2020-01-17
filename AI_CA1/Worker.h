@@ -24,6 +24,8 @@ public:
 private:
 	void bounceOff();
 	bool m_inRoom;
+	float timer;
+
 	sf::Vector2f size;
 
 	float speed;

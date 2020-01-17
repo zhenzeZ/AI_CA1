@@ -11,6 +11,7 @@ worker::worker(sf::Vector2f start, sf::Vector2f position, sf::Vector2i range) :
 	m_randomRange(range),
 	viewAngle(50),
 	viewRange(150.0f),
+	timer(0),
 	m_inRoom(false)
 {
 	m_target = sf::Vector2f(rand() % range.x + position.x, rand() % range.y + position.y);
@@ -44,6 +45,15 @@ void worker::update(float t) {
 	m_sprite.setPosition(position);
 	m_sprite.setRotation(rotation);
 
+	/*going back for 1 sec*/
+	if (timer > 0) {
+		timer -= t;
+		if (timer <= 0) {
+			speed = 50;
+		}
+	}
+
+	m_inRoom = false;
 }
 
 /*
@@ -158,6 +168,7 @@ void worker::bounceOff() {
 	if (!m_inRoom) {
 		speed = -speed;
 		rotation += 90;
+		timer = 1.0f;
 
 		m_inRoom = true;
 	}

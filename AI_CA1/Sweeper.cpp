@@ -12,6 +12,7 @@ sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, vector<s
 	viewAngle(50),
 	viewRange(300.0f),
 	m_searchCounter(0),
+	timer(0),
 	m_roomPosition(roomPosition),
 	m_roomSize(roomSize),
 	m_currentRoom(current),
@@ -94,6 +95,14 @@ void sweeper::update(sf::Vector2f player,float t) {
 	m_viewEdge.x = position.x + sin((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
 	m_viewEdge.y = position.y + cos((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
 	m_triangle.setPoint(2, m_viewEdge);
+
+	/*going back for 1 sec*/
+	if (timer > 0) {
+		timer -= t;
+		if (timer <= 0) {
+			speed = 50;
+		}
+	}
 
 	m_inRoom = false;
 }
@@ -395,6 +404,7 @@ void sweeper::bounceOff() {
 	if (!m_inRoom) {
 		speed = -speed;
 		rotation += 90;
+		timer = 1.0f;
 
 		m_inRoom = true;
 	}
