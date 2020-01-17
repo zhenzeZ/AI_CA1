@@ -1,0 +1,91 @@
+\hypertarget{class_player}{}\doxysection{Player Class Reference}
+\label{class_player}\index{Player@{Player}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_player_afb76be4d9301269fb92b82d4e4fcd557}\label{class_player_afb76be4d9301269fb92b82d4e4fcd557}} 
+{\bfseries Player} (sf\+::\+Vector2f start, sf\+::\+Font font)
+\item 
+\mbox{\Hypertarget{class_player_a20c6631801407346e5721819635d6ddf}\label{class_player_a20c6631801407346e5721819635d6ddf}} 
+void {\bfseries update} (float t)
+\item 
+\mbox{\Hypertarget{class_player_a53938857e80374e79726309e78d1c15c}\label{class_player_a53938857e80374e79726309e78d1c15c}} 
+void {\bfseries render} (sf\+::\+Render\+Window \&window)
+\item 
+\mbox{\Hypertarget{class_player_aa0783a2d6f8f268af7a050903b7bd89c}\label{class_player_aa0783a2d6f8f268af7a050903b7bd89c}} 
+void {\bfseries save\+Worker} (int i)
+\item 
+\mbox{\Hypertarget{class_player_a26c6428cec91ceaf8925d273fa2ce4c2}\label{class_player_a26c6428cec91ceaf8925d273fa2ce4c2}} 
+void {\bfseries player\+In\+The\+Room} ()
+\item 
+\mbox{\Hypertarget{class_player_ab0a2eac3fc6a26d4e84ad7330aa03cef}\label{class_player_ab0a2eac3fc6a26d4e84ad7330aa03cef}} 
+sf\+::\+Vector2f {\bfseries player\+Position} ()
+\item 
+\mbox{\Hypertarget{class_player_a3ad36c1d3f0b2e7302de6d8d9a75232f}\label{class_player_a3ad36c1d3f0b2e7302de6d8d9a75232f}} 
+sf\+::\+Vector2f {\bfseries player\+Size} ()
+\item 
+\mbox{\Hypertarget{class_player_aaa35ab3c93466e361f2dd6870989fcc3}\label{class_player_aaa35ab3c93466e361f2dd6870989fcc3}} 
+sf\+::\+Vector2f {\bfseries pursue\+Position} ()
+\item 
+\mbox{\Hypertarget{class_player_a141b44bb826778af79e80c82df04cdf7}\label{class_player_a141b44bb826778af79e80c82df04cdf7}} 
+sf\+::\+Vector2f {\bfseries player\+Velocity} ()
+\item 
+\mbox{\Hypertarget{class_player_a54c28def7c1bc9dbe26221e8474ed5ce}\label{class_player_a54c28def7c1bc9dbe26221e8474ed5ce}} 
+float {\bfseries player\+Radian} ()
+\item 
+\mbox{\Hypertarget{class_player_a797a812d472b9bd4de64ce3e25436f4b}\label{class_player_a797a812d472b9bd4de64ce3e25436f4b}} 
+void {\bfseries ammo\+Changed} (int ammo)
+\item 
+\mbox{\Hypertarget{class_player_a9570540a6cbc72e54a049b316eb16bc5}\label{class_player_a9570540a6cbc72e54a049b316eb16bc5}} 
+int {\bfseries get\+Ammo} ()
+\item 
+\mbox{\Hypertarget{class_player_abcb15d249bed9a4ab0ab86b52b0d747a}\label{class_player_abcb15d249bed9a4ab0ab86b52b0d747a}} 
+int {\bfseries get\+Health} ()
+\item 
+\mbox{\Hypertarget{class_player_a1fab67dbfc15538c461526b01bfe2aa6}\label{class_player_a1fab67dbfc15538c461526b01bfe2aa6}} 
+sf\+::\+Float\+Rect {\bfseries bounding\+Box} ()
+\item 
+\mbox{\Hypertarget{class_player_a0cf028a7d9845d61e16439f78ef496b2}\label{class_player_a0cf028a7d9845d61e16439f78ef496b2}} 
+void {\bfseries button\+Check} ()
+\item 
+void \mbox{\hyperlink{class_player_a1e9d1a5eb266e05d52479cd0e44b1033}{power\+Ups}} (int item\+Style)
+\begin{DoxyCompactList}\small\item\em restore health and ammo to player or active the barrier for player, and player won\textquotesingle{}t take damage when barrier is on \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{class_player_aa89121aeefafe75481d747d6e977ce4f}\label{class_player_aa89121aeefafe75481d747d6e977ce4f}} 
+float {\bfseries get\+Max\+Speed} ()
+\item 
+\mbox{\Hypertarget{class_player_a4f45f3066185e7bf54e4afcd72ca8aaa}\label{class_player_a4f45f3066185e7bf54e4afcd72ca8aaa}} 
+void {\bfseries damage} (float t\+\_\+damage)
+\item 
+\mbox{\Hypertarget{class_player_a4339ef73766b12a6c0051d2efba5230f}\label{class_player_a4339ef73766b12a6c0051d2efba5230f}} 
+int {\bfseries get\+Workers\+Saved} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{class_player_ac3c023ad6982f26c46642cd8808cb2ce}\label{class_player_ac3c023ad6982f26c46642cd8808cb2ce}} 
+float {\bfseries m\+\_\+fire\+Rate}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{class_player_a1e9d1a5eb266e05d52479cd0e44b1033}\label{class_player_a1e9d1a5eb266e05d52479cd0e44b1033}} 
+\index{Player@{Player}!powerUps@{powerUps}}
+\index{powerUps@{powerUps}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{powerUps()}{powerUps()}}
+{\footnotesize\ttfamily void Player\+::power\+Ups (\begin{DoxyParamCaption}\item[{int}]{item\+Style }\end{DoxyParamCaption})}
+
+
+
+restore health and ammo to player or active the barrier for player, and player won\textquotesingle{}t take damage when barrier is on 
+
+
+\begin{DoxyParams}{Parameters}
+{\em item\+Style} & \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+A\+I\+\_\+\+C\+A1/Player.\+h\item 
+A\+I\+\_\+\+C\+A1/Player.\+cpp\end{DoxyCompactItemize}

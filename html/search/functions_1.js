@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['run_23',['run',['../class_game.html#a1ab78f5ed0d5ea879157357cf2fb2afa',1,'Game']]]
+  ['powerups_24',['powerUps',['../class_player.html#a1e9d1a5eb266e05d52479cd0e44b1033',1,'Player']]]
 ];
