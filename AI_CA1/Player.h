@@ -34,6 +34,7 @@ public:
 
 	float getMaxSpeed() { return maxSpeed; }
 	void damage(int t_damage);
+	int getWorkersSaved() { return m_workerSaved; }
 private:
 	void bounceOff();
 

@@ -14,9 +14,10 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	//m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "CA1" },
-	m_window{ sf::VideoMode{ 500, 500, 32U }, "CA1" },
-	m_exitGame{ false } //when true game will exit
+	m_window{ sf::VideoMode{ 1000U, 700, 32U }, "CA1" },
+	//m_window{ sf::VideoMode{ 500, 500, 32U }, "CA1" },
+	m_exitGame{ false }, //when true game will exit
+	m_isGameOver{false}
 {
 	m_window.setVerticalSyncEnabled(true);
 	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
@@ -37,6 +38,12 @@ Game::Game() :
 	m_window.setView(gameView);
 
 	m_itemSpawnRate = 10.0f;
+
+	m_gameWon.setFont(m_font);
+	m_gameWon.setFillColor(sf::Color::Black);
+	m_gameWon.setOutlineColor(sf::Color::Red);
+	m_gameWon.setOutlineThickness(2);
+	m_gameWon.setScale(sf::Vector2f(2.0f, 2.0f));
 }
 
 /// <summary>
@@ -69,7 +76,7 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
 
-			if (m_player->getHealth() > 0) {
+			if (!m_isGameOver) {
 				update(timePerFrame); //60 fps
 			}
 		}
@@ -116,6 +123,9 @@ void Game::processKeys(sf::Event t_event)
 /// <param name="t_deltaTime">time interval per frame</param>
 void Game::update(sf::Time t_deltaTime)
 {
+	if (m_player->getHealth() <= 0) {
+		m_isGameOver = true;
+	}
 	if (m_exitGame)
 	{
 		m_window.close();
@@ -234,13 +244,11 @@ void Game::update(sf::Time t_deltaTime)
 		if (m_rooms[i]->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
 			m_player->playerInTheRoom();
 		}
-
 		for (int x = 0; x < m_workers.size(); x++) {
 			if (m_rooms[i]->isPlayerInRoom(m_workers[x]->workerSize(), m_workers[x]->workerPosition())) {
 				m_workers[x]->inTheRoom();
 			}
 		}
-
 		for (int x = 0; x < m_sweepers.size(); x++) {
 			if (m_rooms[i]->isPlayerInRoom(m_sweepers[x]->sweeperSize(), m_sweepers[x]->sweeperPosition())) {
 				m_sweepers[x]->inTheRoom();
@@ -271,9 +279,13 @@ void Game::update(sf::Time t_deltaTime)
 	/*sweeper movement*/
 	for (int i = 0; i < m_sweepers.size(); i++) {
 		m_sweepers[i]->update(m_player->playerPosition(), t_deltaTime.asSeconds());
-
 	}
 
+	if (m_player->getWorkersSaved() == m_maxWorker) {
+		m_isGameOver = true;
+		m_gameWon.setPosition(m_player->playerPosition());
+		m_gameWon.setString("You Won!");
+	}
 }
 
 /// <summary>
@@ -307,7 +319,7 @@ void Game::render()
 	m_player->render(m_window);
 	m_alienNest->render(m_window);
 	m_alienNest2->render(m_window);
-
+	m_window.draw(m_gameWon);
 	m_window.setView(minimapView);
 	sf::RectangleShape border(minimapView.getSize());
 	border.setFillColor(sf::Color::Yellow); // temp colour

@@ -28,6 +28,7 @@ public:
 	void run();
 
 private:
+	bool m_isGameOver;
 	// the game view (full window)
 	sf::View gameView; 
 	
@@ -45,6 +46,7 @@ private:
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_font; // font used by message
+	sf::Text m_gameWon;
 
 	AlienNest* m_alienNest;
 	AlienNest* m_alienNest2;
