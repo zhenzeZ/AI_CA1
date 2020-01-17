@@ -136,6 +136,9 @@ void player::update(float t) {
 	if (m_health <= 0) {
 		m_health = 0;
 	}
+	else if (m_health > 100) {
+		m_health = 100;
+	}
 
 	m_workersText.setString("Worker saved: " + std::to_string(m_workerSaved));
 	m_ammoText.setString("AMMO: " + std::to_string(m_ammo));

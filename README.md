@@ -1,4 +1,10 @@
 # AI_CA1
+Left Arrow Key:turn left
+Right Arrow Key:turn right
+Up Arrow Key:move forward
+Down Arrow Key:fall back
+Space bar: shoot the bullet
+
 1. Player/Game world: 
 	Zhenze 100%
 	Dion 0%

@@ -21,6 +21,8 @@ public:
 	sf::Vector2f getPosition() { return position; }
 	void destroyMissile();
 	vector<Predator*> getPredators() { return m_predators; }
+
+	bool erasePredators(sf::FloatRect bullet);
 private:
 	float m_secondsPassed;
 	vector<Predator*> m_predators;

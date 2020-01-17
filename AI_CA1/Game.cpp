@@ -170,17 +170,28 @@ void Game::update(sf::Time t_deltaTime)
 			m_bullets.erase(m_bullets.begin() + i);
 			break;
 		}
+	
+		if (m_alienNest->erasePredators(m_bullets[i]->boundingBox())) {
+			m_bullets.erase(m_bullets.begin() + i);
+			break;
+		}
+		
+		if (m_alienNest2->erasePredators(m_bullets[i]->boundingBox())) {
+			m_bullets.erase(m_bullets.begin() + i);
+			break;
+		}
+
 		//bool doubleBreak = false;
-		for (int j = 0; j < m_alienNest->getPredators().size(); j++)
-		{
-			if (m_bullets[i]->boundingBox().intersects(m_alienNest->getPredators()[j]->boundingBox())) {
+		//for (int j = 0; j < m_alienNest->getPredators().size(); j++)
+		//{
+		//	if (m_bullets[i]->boundingBox().intersects(m_alienNest->getPredators()[j]->boundingBox())) {
 		//		//m_alienNest->getPredators().erase(m_alienNest->getPredators().begin() + j);
 		//		//m_bullets.erase(m_bullets.begin() + i);
 		//		doubleBreak = true;
 		//		break;
-				std::cout << "Alien hit" << std::endl;
-			}
-		}
+		//		std::cout << "Alien hit" << std::endl;
+		//	}
+		//}
 		//if (doubleBreak) {
 		//	break;
 		//}

@@ -13,14 +13,12 @@ public:
 	~Predator();
 	void update(float t);
 	void render(sf::RenderWindow& window);
-<<<<<<< HEAD
-	sf::FloatRect boundingBox();
 
-=======
+	sf::FloatRect boundingBox();
 
 	/*sf::FloatRect boundingBox();
 	void inTheRoom() { m_inRoom = true; }*/
->>>>>>> 5ac3492e1377214bee69b595d60aacf7f31e6ff2
+
 private:
 	/*void bounceOff();
 	bool m_inRoom;

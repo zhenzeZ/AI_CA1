@@ -157,3 +157,15 @@ void AlienNest::destroyMissile()
 {
 	m_isMissileAlive = false;
 }
+
+bool AlienNest::erasePredators(sf::FloatRect bullet)
+{
+	for (int i = 0; i < m_predators.size(); i ++) {
+		if (bullet.intersects(m_predators[i]->boundingBox())) {
+			m_predators.erase(m_predators.begin() + i);
+			return true;
+		}
+	}
+
+	return false;
+}
