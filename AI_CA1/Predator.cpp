@@ -3,6 +3,8 @@
 Predator::Predator(player& player, sf::Vector2f t_position) :
 	m_player{player}
 {
+	//timer = 0;
+
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/zenomorph.png"))
 	{
 		std::string s("Error loading image");
@@ -24,6 +26,8 @@ void Predator::update(float t)
 	m_sprite.setPosition(m_position);
 	m_position += m_velocity;
 	m_sprite.setRotation(m_orientation);
+
+
 }
 
 void Predator::render(sf::RenderWindow& window)
@@ -43,3 +47,13 @@ void Predator::kinematicSeek(float t_deltaTime, sf::Vector2f t_newTarget)
 	m_velocity *= MAX_VELOCITY;
 	m_orientation = Kinematic::getNewOrientation(m_position, m_player.playerPosition());
 }
+
+//sf::FloatRect Predator::boundingBox()
+//{
+//	//bounding box for collision
+//	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,
+//		m_sprite.getGlobalBounds().top + 10,
+//		m_sprite.getGlobalBounds().width - 10,
+//		m_sprite.getGlobalBounds().height - 10);
+//	return boundingBox;
+//}

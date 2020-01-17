@@ -71,7 +71,7 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
 
-			if (m_player->getHealth() >= 0) {
+			if (m_player->getHealth() > 0) {
 				update(timePerFrame); //60 fps
 			}
 		}
@@ -184,7 +184,6 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	/* player movement*/
-	m_player->update(t_deltaTime.asSeconds());
 
 	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox())) {
 		m_player->damage();
@@ -194,6 +193,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_player->damage();
 		m_alienNest2->destroyMissile();
 	}
+	m_player->update(t_deltaTime.asSeconds());
 
 	for (int i = 0; i < m_rooms.size(); i++) {
 		if (m_rooms[i]->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
