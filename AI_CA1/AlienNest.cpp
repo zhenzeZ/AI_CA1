@@ -6,7 +6,9 @@ AlienNest::AlienNest(player& t_player, sf::Vector2f t_position) :
 	m_isMissileAlive{false},
 	m_missileVelocity{ -MAX_VELOCITY, 0.0f },
 	m_orientation{ 0.0f },
-	m_targetPosition{ 0.0f, 0.0f }
+	m_targetPosition{ 0.0f, 0.0f },
+	m_noOfPredators{ 0 },
+	m_secondsPassed{ 0 }
 
 {
 	m_health = 4; // four hits from player 
@@ -24,6 +26,7 @@ AlienNest::AlienNest(player& t_player, sf::Vector2f t_position) :
 	m_sprite.setPosition(position);
 	m_sprite.setOrigin(sf::Vector2f(m_texture.getSize().x / 2, m_texture.getSize().y / 2));
 
+	m_predators.reserve(MAX_PREDATORS);
 }
 
 AlienNest::~AlienNest()
@@ -44,6 +47,15 @@ void AlienNest::update(float t)
 			m_isAlive = false;
 			m_texture.~Texture();
 		}
+		if (m_noOfPredators < MAX_PREDATORS) {
+			m_secondsPassed += t;
+			if (m_secondsPassed >= 2) {
+				m_predators.push_back(new Predator(m_player, position));
+				m_noOfPredators++;
+				m_secondsPassed = 0;
+			}
+
+		}
 	}
 	if (m_isMissileAlive) {
 		std::cout << m_missileTTL << std::endl;
@@ -57,6 +69,9 @@ void AlienNest::update(float t)
 		m_missilePosition += m_missileVelocity;
 		m_missileSprite.setRotation(m_orientation);
 	}
+	for (auto p : m_predators) {
+		p->update(t);
+	}
 }
 
 void AlienNest::render(sf::RenderWindow& window)
@@ -66,6 +81,9 @@ void AlienNest::render(sf::RenderWindow& window)
 	}
 	if (m_isMissileAlive) {
 		window.draw(m_missileSprite);
+	}
+	for (auto p : m_predators) {
+		p->render(window);
 	}
 }
 

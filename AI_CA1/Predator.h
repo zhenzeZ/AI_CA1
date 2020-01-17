@@ -9,18 +9,20 @@ using namespace std;
 
 class Predator {
 public:
-	Predator(player& player);
+	Predator(player& player, sf::Vector2f t_position);
 	~Predator();
 	void update(float t);
 	void render(sf::RenderWindow& window);
 
 
 private:
+	player& m_player;
 	const short MAX_TIME_PRED = 1000; // ms
 
 	sf::Vector2f m_targetPosition;
 	sf::Vector2f m_position;
 	sf::Vector2f m_velocity;
+	float m_orientation;
 
 	int m_health;
 	float rotation;
@@ -39,5 +41,5 @@ private:
 	float viewRange;
 
 	void attack(sf::Vector2f player, float t);
-	void kinematicSeek(float t_deltaTime, sf::Vector2f& t_playerPos);
+	void kinematicSeek(float t_deltaTime, sf::Vector2f t_playerPos);
 };
