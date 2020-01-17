@@ -18,7 +18,6 @@ player::player(sf::Vector2f start, sf::Font font) :
 	m_health(100.0f),
 	m_energy(50.0f)
 {
-
 	setUpShape();
 	setUpText();
 
@@ -44,12 +43,9 @@ player::player(sf::Vector2f start, sf::Font font) :
 	m_barrier.setPosition(position);
 	m_barrier.setRotation(rotation);
 	m_barrier.setOrigin(sf::Vector2f(m_barrierTexture.getSize().x / 2, m_barrierTexture.getSize().y / 2));
-
 	m_barrierOn = false;
 	m_barrierTimer = 0.0f;
-
 	size = sf::Vector2f(m_texture.getSize());
-
 }
 
 player::~player() {

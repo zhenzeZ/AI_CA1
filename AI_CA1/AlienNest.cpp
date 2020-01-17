@@ -54,7 +54,6 @@ void AlienNest::update(float t)
 				m_noOfPredators++;
 				m_secondsPassed = 0;
 			}
-
 		}
 	}
 	if (m_isMissileAlive) {
