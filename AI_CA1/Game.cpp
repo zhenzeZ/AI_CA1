@@ -22,7 +22,6 @@ Game::Game() :
 	{
 		std::cout << "problem loading arial black font" << std::endl;
 	}
-
 	setupMap(); // create map
 	setupWorkers(); // spawn workers
 	setUpSweeper(); // spawn sweeper
@@ -165,8 +164,13 @@ void Game::update(sf::Time t_deltaTime)
 
 	/* player movement*/
 	m_player->update(t_deltaTime.asSeconds());
-	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox()) || m_player->boundingBox().intersects(m_alienNest2->missileBoundingBox())) {
-		std::cout << "Player hit" << std::endl;
+	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox())) {
+		m_player->damage();
+		m_alienNest->destroyMissile();
+	}
+	if (m_player->boundingBox().intersects(m_alienNest2->missileBoundingBox())) {
+		m_player->damage();
+		m_alienNest2->destroyMissile();
 	}
 
 	for (int i = 0; i < m_rooms.size(); i++) {
