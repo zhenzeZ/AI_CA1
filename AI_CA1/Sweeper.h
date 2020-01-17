@@ -28,8 +28,15 @@ public:
 	int getWorker() { return m_worker; }
 
 	sf::FloatRect boundingBox();
+	sf::Vector2f sweeperPosition() { return position; } // return current positon
+	sf::Vector2f sweeperSize() { return size; }
+	void inTheRoom() { m_inRoom = true; }
 
 private:
+	void bounceOff();
+	bool m_inRoom;
+	sf::Vector2f size;
+
 	AIStates m_aiStates;
 
 	float speed;

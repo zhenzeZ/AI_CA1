@@ -34,6 +34,8 @@ Game::Game() :
 	gameView.setCenter(m_player->playerPosition()); // set mid of screen to camera
 	minimapView.setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f)); 
 	m_window.setView(gameView);
+
+	m_itemSpawnRate = 10.0f;
 }
 
 /// <summary>
@@ -119,6 +121,14 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
+	if (m_itemSpawnRate <= 0.0f) {
+		m_itemSpawnRate = 10.0f;
+		spawnItem();
+	}
+	else {
+		m_itemSpawnRate -= t_deltaTime.asSeconds();
+	}
+
 	m_alienNest->update(t_deltaTime.asSeconds());
 	m_alienNest2->update(t_deltaTime.asSeconds());
 
@@ -162,6 +172,14 @@ void Game::update(sf::Time t_deltaTime)
 		}
 	}
 
+	/*get a random power up effect when player get a item box*/
+	for (int i = 0; i < m_items.size(); i++) {
+		if (m_items[i]->collisionCheck(m_player->boundingBox())) {
+			m_player->powerUps(rand() % 3 + 1);
+			m_items.erase(m_items.begin() + i);
+		}
+	}
+
 	/* player movement*/
 	m_player->update(t_deltaTime.asSeconds());
 	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox())) {
@@ -176,6 +194,18 @@ void Game::update(sf::Time t_deltaTime)
 	for (int i = 0; i < m_rooms.size(); i++) {
 		if (m_rooms[i]->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
 			m_player->playerInTheRoom();
+		}
+
+		for (int x = 0; x < m_workers.size(); x++) {
+			if (m_rooms[i]->isPlayerInRoom(m_workers[x]->workerSize(), m_workers[x]->workerPosition())) {
+				m_workers[x]->inTheRoom();
+			}
+		}
+
+		for (int x = 0; x < m_sweepers.size(); x++) {
+			if (m_rooms[i]->isPlayerInRoom(m_sweepers[x]->sweeperSize(), m_sweepers[x]->sweeperPosition())) {
+				m_sweepers[x]->inTheRoom();
+			}
 		}
 	}
 
@@ -320,8 +350,8 @@ void Game::setupWorkers()
 
 	for (int i = 0; i < m_maxWorker; i++) {
 
-		//int spawnRoom = std::rand() % m_numOfRoom;
-		int spawnRoom = 1;
+		int spawnRoom = std::rand() % m_numOfRoom;
+		//int spawnRoom = 1;
 		m_worker = new worker(m_rooms[spawnRoom]->getOrigin(), m_rooms[spawnRoom]->getPosition(), m_rooms[spawnRoom]->getSize());
 		m_workers.push_back(m_worker);
 	}
@@ -334,9 +364,18 @@ void Game::setUpSweeper() {
 	m_maxSweeper = 5;
 
 	for (int i = 0; i < m_maxSweeper; i++) {
-		//int spawnRoom = std::rand() % m_numOfRoom;
-		int spawnRoom = 0;
+		int spawnRoom = std::rand() % m_numOfRoom;
+		//int spawnRoom = 0;
 		m_sweeper = new sweeper(m_roomPosition[spawnRoom], m_roomPosition, m_roomSize , spawnRoom, m_font);
 		m_sweepers.push_back(m_sweeper);
+	}
+}
+
+void Game::spawnItem() {
+
+	if (m_items.size() < 5) {
+		int spawnRoom = std::rand() % m_numOfRoom;
+		m_item = new item(m_rooms[spawnRoom]->getPosition(), m_rooms[spawnRoom]->getSize());
+		m_items.push_back(m_item);
 	}
 }

@@ -16,9 +16,16 @@ public:
 
 	sf::FloatRect boundingBox();
 	sf::Vector2f workerPosition() { return position; } // return current positon
+	sf::Vector2f workerSize() { return size; }
 	bool collisionCheck(sf::FloatRect object);
 
+	void inTheRoom() { m_inRoom = true; }
+
 private:
+	void bounceOff();
+	bool m_inRoom;
+	sf::Vector2f size;
+
 	float speed;
 	float rotation;
 	float radian;

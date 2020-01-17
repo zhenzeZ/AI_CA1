@@ -15,7 +15,8 @@ sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, vector<s
 	m_roomPosition(roomPosition),
 	m_roomSize(roomSize),
 	m_currentRoom(current),
-	m_font(font)
+	m_font(font),
+	m_inRoom(false)
 {
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/Sweeper.png"))
 	{
@@ -32,10 +33,13 @@ sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, vector<s
 	m_workerText.setFillColor(sf::Color::White);
 	m_workerText.setOutlineColor(sf::Color::Black);
 	m_workerText.setOutlineThickness(2);
+	m_workerText.setScale(sf::Vector2f(0.5f, 0.5f));
 	//m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
 
 	m_triangle.setPointCount(3);
 	m_triangle.setFillColor(sf::Color(0, 255, 0, 100));
+
+	size = sf::Vector2f(m_texture.getSize());
 }
 
 sweeper::~sweeper() {
@@ -44,18 +48,19 @@ sweeper::~sweeper() {
 
 void sweeper::update(sf::Vector2f player,float t) {
 
-	vision(player, 2);
-
-	m_nextRoom = m_currentRoom++;
+	m_nextRoom = m_currentRoom + 1;
 	if (m_nextRoom >= m_roomPosition.size()) {
 		m_nextRoom = 0;
 	}
 
-	m_previousRoom = m_currentRoom--;
+	m_previousRoom = m_currentRoom - 1;
 	if (m_previousRoom < 0) {
 		m_previousRoom = m_roomPosition.size() - 1;
 	}
 
+	vision(player, 2);
+
+	bounceOff();
 
 	switch (m_aiStates) {
 	case AIStates::Wander:
@@ -75,7 +80,7 @@ void sweeper::update(sf::Vector2f player,float t) {
 	m_sprite.setRotation(rotation);
 
 	/*show how many worker catched */
-	m_workerText.setString("Worker : " + std::to_string(m_worker));
+	m_workerText.setString("Workers loaded : " + std::to_string(m_worker));
 	m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
 
 	/*set the view range position*/
@@ -90,6 +95,7 @@ void sweeper::update(sf::Vector2f player,float t) {
 	m_viewEdge.y = position.y + cos((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
 	m_triangle.setPoint(2, m_viewEdge);
 
+	m_inRoom = false;
 }
 
 void sweeper::vision(sf::Vector2f worker, int style) {
@@ -383,4 +389,13 @@ void sweeper::wanderState() {
 	m_target = sf::Vector2f(rand() % m_roomSize[m_currentRoom].x + (m_roomPosition[m_currentRoom].x - m_roomSize[m_currentRoom].x / 2), rand() % m_roomSize[m_currentRoom].y + (m_roomPosition[m_currentRoom].y - m_roomSize[m_currentRoom].y / 2));
 	cout << "wander! x: " << m_target.x << " y: " << m_target.y << endl;
 	m_aiStates = AIStates::Wander; 
+}
+
+void sweeper::bounceOff() {
+	if (!m_inRoom) {
+		speed = -speed;
+		rotation += 90;
+
+		m_inRoom = true;
+	}
 }

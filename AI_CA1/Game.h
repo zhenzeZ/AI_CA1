@@ -45,6 +45,7 @@ private:
 	void setupMap();
 	void setupWorkers();
 	void setUpSweeper();
+	void spawnItem();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_font; // font used by message

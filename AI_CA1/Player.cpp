@@ -51,7 +51,7 @@ void player::setUpShape()
 	}
 	m_HealthBar[1].setFillColor(sf::Color::Red);
 	m_HealthBar[0].setOutlineThickness(3);
-	m_HealthBar[0].setOutlineColor(sf::Color::White);
+	m_HealthBar[0].setOutlineColor(sf::Color::Yellow);
 }
 void player::setUpText() {
 	m_ammoText.setFont(m_font);

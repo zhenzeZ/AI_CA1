@@ -10,7 +10,8 @@ worker::worker(sf::Vector2f start, sf::Vector2f position, sf::Vector2i range) :
 	m_randomOrigin(position),
 	m_randomRange(range),
 	viewAngle(50),
-	viewRange(150.0f)
+	viewRange(150.0f),
+	m_inRoom(false)
 {
 	m_target = sf::Vector2f(rand() % range.x + position.x, rand() % range.y + position.y);
 
@@ -25,6 +26,8 @@ worker::worker(sf::Vector2f start, sf::Vector2f position, sf::Vector2i range) :
 	m_sprite.setRotation(rotation);
 	m_sprite.setOrigin(sf::Vector2f(m_texture.getSize().x / 2, m_texture.getSize().y / 2));
 
+	size = sf::Vector2f(m_texture.getSize());
+	m_inRoom = false;
 }
 
 worker::~worker() {
@@ -32,6 +35,7 @@ worker::~worker() {
 }
 
 void worker::update(float t) {
+	bounceOff();
 
 	wander(m_target, t);
 
@@ -148,4 +152,13 @@ bool worker::collisionCheck(sf::FloatRect object)
 	}
 
 	return false;
+}
+
+void worker::bounceOff() {
+	if (!m_inRoom) {
+		speed = -speed;
+		rotation += 90;
+
+		m_inRoom = true;
+	}
 }

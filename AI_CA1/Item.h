@@ -17,7 +17,7 @@ public:
 	bool checkAlive() { return m_alive; }
 	bool collisionCheck(sf::FloatRect player);
 private:
-	void setPosition();
+	void setPosition(sf::Vector2f position, sf::Vector2i range);
 	void setUpTexture();
 
 	sf::Texture m_itemTexture;

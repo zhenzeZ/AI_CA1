@@ -4,7 +4,7 @@
 item::item(sf::Vector2f position, sf::Vector2i range)
 {
 	m_alive = false;
-	setPosition();
+	setPosition(position, range);
 	setUpTexture();
 }
 
@@ -54,9 +54,9 @@ bool item::collisionCheck(sf::FloatRect player)
 	return false;
 }
 
-void item::setPosition()
+void item::setPosition(sf::Vector2f position, sf::Vector2i range)
 {
-	m_itemPosition = sf::Vector2f(rand() % 1800, 1100);
+	m_itemPosition = sf::Vector2f(rand() % range.x + position.x, rand() % range.y + position.y);
 	m_itemSprite.setPosition(m_itemPosition);
 	m_alive = true;
 }
