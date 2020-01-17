@@ -208,7 +208,6 @@ void Game::update(sf::Time t_deltaTime)
 	}
 
 	/* player movement*/
-	m_player->update(t_deltaTime.asSeconds());
 
 	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox())) {
 		m_player->damage(5);
@@ -218,6 +217,7 @@ void Game::update(sf::Time t_deltaTime)
 		m_player->damage(5);
 		m_alienNest2->destroyMissile();
 	}
+	m_player->update(t_deltaTime.asSeconds());
 
 	for (int i = 0; i < m_rooms.size(); i++) {
 		if (m_rooms[i]->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {

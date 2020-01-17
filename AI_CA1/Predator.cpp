@@ -3,6 +3,8 @@
 Predator::Predator(player& player, sf::Vector2f t_position) :
 	m_player{player}
 {
+	//timer = 0;
+
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/zenomorph.png"))
 	{
 		std::string s("Error loading image");
@@ -24,6 +26,8 @@ void Predator::update(float t)
 	m_sprite.setPosition(m_position);
 	m_position += m_velocity;
 	m_sprite.setRotation(m_orientation);
+
+
 }
 
 void Predator::render(sf::RenderWindow& window)
