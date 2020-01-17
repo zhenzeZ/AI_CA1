@@ -85,6 +85,8 @@ void player::setUpText() {
 	m_gameoverText.setOutlineColor(sf::Color::Red);
 	m_gameoverText.setOutlineThickness(2);
 	m_gameoverText.setScale(sf::Vector2f(2.0f, 2.0f));
+	m_gameoverText.setString("GAME OVER");
+
 }
 
 void player::update(float t) {
@@ -174,10 +176,10 @@ void player::movementCalculate(float t) {
 	pursue = position + velocity * pursueTime;
 }
 
-void player::damage()
+void player::damage(int t_damage)
 {
 	if (!m_barrierOn) {
-		m_health-= 10;
+		m_health-= t_damage;
 	}
 }
 

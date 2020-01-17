@@ -74,11 +74,11 @@
     <ClCompile Include="AlienNest.cpp">
       <Filter>资源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Kinematic.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Predator.cpp">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Kinematic.cpp">
+      <Filter>资源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

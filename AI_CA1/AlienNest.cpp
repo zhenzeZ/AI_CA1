@@ -49,7 +49,7 @@ void AlienNest::update(float t)
 		}
 		if (m_noOfPredators < MAX_PREDATORS) {
 			m_secondsPassed += t;
-			if (m_secondsPassed >= 2) {
+			if (m_secondsPassed >= 4) {
 				m_predators.push_back(new Predator(m_player, position));
 				m_noOfPredators++;
 				m_secondsPassed = 0;
@@ -71,6 +71,9 @@ void AlienNest::update(float t)
 	}
 	for (auto p : m_predators) {
 		p->update(t);
+		if (m_player.boundingBox().intersects(p->boundingBox())) {
+			m_player.damage(1);
+		}
 	}
 }
 

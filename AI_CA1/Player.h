@@ -33,7 +33,7 @@ public:
 	float m_fireRate;
 
 	float getMaxSpeed() { return maxSpeed; }
-	void damage();
+	void damage(int t_damage);
 private:
 	void bounceOff();
 

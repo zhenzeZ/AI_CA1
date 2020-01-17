@@ -13,7 +13,7 @@ public:
 	~Predator();
 	void update(float t);
 	void render(sf::RenderWindow& window);
-
+	sf::FloatRect boundingBox();
 
 private:
 	player& m_player;

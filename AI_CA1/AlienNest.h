@@ -20,11 +20,12 @@ public:
 	void damage();
 	sf::Vector2f getPosition() { return position; }
 	void destroyMissile();
+	vector<Predator*> getPredators() { return m_predators; }
 private:
 	float m_secondsPassed;
 	vector<Predator*> m_predators;
 	int m_noOfPredators;
-	const int MAX_PREDATORS = 3;
+	const int MAX_PREDATORS = 2;
 	bool m_isAlive;
 	player& m_player;
 	const short MAX_TIME_PRED = 1000; // ms

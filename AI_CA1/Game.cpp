@@ -14,7 +14,8 @@
 /// load and setup thne image
 /// </summary>
 Game::Game() :
-	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "CA1" },
+	//m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "CA1" },
+	m_window{ sf::VideoMode{ 500, 500, 32U }, "CA1" },
 	m_exitGame{ false } //when true game will exit
 {
 	m_window.setVerticalSyncEnabled(true);
@@ -39,13 +40,10 @@ Game::Game() :
 }
 
 /// <summary>
-/// default destructor we didn't dynamically allocate anything
-/// 
-/// so we don't need to free it, but mthod needs to be here
+/// default destructor
 /// </summary>
 Game::~Game()
 {
-
 }
 
 
@@ -71,7 +69,7 @@ void Game::run()
 			timeSinceLastUpdate -= timePerFrame;
 			processEvents(); // at least 60 fps
 
-			if (m_player->getHealth() >= 0) {
+			if (m_player->getHealth() > 0) {
 				update(timePerFrame); //60 fps
 			}
 		}
@@ -81,8 +79,7 @@ void Game::run()
 
 /// <summary>
 /// handle user and system events/ input
-/// get key presses/ mouse moves etc. from OS
-/// and user :: Don't do game update here
+/// get key presses
 /// </summary>
 void Game::processEvents()
 {
@@ -168,11 +165,38 @@ void Game::update(sf::Time t_deltaTime)
 			m_bullets.erase(m_bullets.begin() + i);
 			break;
 		}
-		else if (m_bullets[i]->boundingBox().intersects(m_alienNest2->boundingBox())) {
+		if (m_bullets[i]->boundingBox().intersects(m_alienNest2->boundingBox())) {
 			m_alienNest2->damage();
 			m_bullets.erase(m_bullets.begin() + i);
 			break;
 		}
+		//bool doubleBreak = false;
+		for (int j = 0; j < m_alienNest->getPredators().size(); j++)
+		{
+			if (m_bullets[i]->boundingBox().intersects(m_alienNest->getPredators()[j]->boundingBox())) {
+		//		//m_alienNest->getPredators().erase(m_alienNest->getPredators().begin() + j);
+		//		//m_bullets.erase(m_bullets.begin() + i);
+		//		doubleBreak = true;
+		//		break;
+				std::cout << "Alien hit" << std::endl;
+			}
+		}
+		//if (doubleBreak) {
+		//	break;
+		//}
+		for (int j = 0; j < m_alienNest2->getPredators().size(); j++)
+		{
+			if (m_bullets[i]->boundingBox().intersects(m_alienNest2->getPredators()[j]->boundingBox())) {
+		//		//m_alienNest2->getPredators().erase(m_alienNest2->getPredators().begin() + j);
+		//		//m_bullets.erase(m_bullets.begin() + i);
+		//		doubleBreak = true;
+		//		break;
+				std::cout << "Alien hit" << std::endl;
+			}
+		}
+		//if (doubleBreak) {
+		//	break;
+		//}
 	}
 
 	/*get a random power up effect when player get a item box*/
@@ -187,11 +211,11 @@ void Game::update(sf::Time t_deltaTime)
 	m_player->update(t_deltaTime.asSeconds());
 
 	if (m_player->boundingBox().intersects(m_alienNest->missileBoundingBox())) {
-		m_player->damage();
+		m_player->damage(5);
 		m_alienNest->destroyMissile();
 	}
 	if (m_player->boundingBox().intersects(m_alienNest2->missileBoundingBox())) {
-		m_player->damage();
+		m_player->damage(5);
 		m_alienNest2->destroyMissile();
 	}
 

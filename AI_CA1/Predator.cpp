@@ -43,3 +43,13 @@ void Predator::kinematicSeek(float t_deltaTime, sf::Vector2f t_newTarget)
 	m_velocity *= MAX_VELOCITY;
 	m_orientation = Kinematic::getNewOrientation(m_position, m_player.playerPosition());
 }
+
+sf::FloatRect Predator::boundingBox()
+{
+	//bounding box for collision
+	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,
+		m_sprite.getGlobalBounds().top + 10,
+		m_sprite.getGlobalBounds().width - 10,
+		m_sprite.getGlobalBounds().height - 10);
+	return boundingBox;
+}
