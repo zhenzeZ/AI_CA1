@@ -15,12 +15,19 @@ using namespace std;
 
 class sweeper {
 public:
-	sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current, sf::Font font);
+	sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, vector<sf::Vector2i> roomSize, int current, sf::Font font);
 	~sweeper();
-	void update(sf::Vector2f player, sf::Vector2f worker , float t);
+	void update(sf::Vector2f player, float t);
+	void vision(sf::Vector2f worker, int style);
 	void render(sf::RenderWindow& window);
 
-	void inPlayerSight() { m_aiStates = AIStates::Flee; }
+	void fleeState() { m_aiStates = AIStates::Flee; }
+	void wanderState();
+
+	void catchWorker() { m_worker++; }
+	int getWorker() { return m_worker; }
+
+	sf::FloatRect boundingBox();
 
 private:
 	AIStates m_aiStates;
@@ -54,13 +61,16 @@ private:
 	sf::Text m_workerText;
 
 	vector<sf::Vector2f> m_roomPosition;
+	vector<sf::Vector2i> m_roomSize;
+
 	int m_currentRoom;
 	int m_nextRoom;
-	int previousRoom;
+	int m_previousRoom;
+
+	int m_searchCounter;
 
 	void seek(sf::Vector2f worker, float t);
 	void wander(sf::Vector2f target, float t);
 	void flee(sf::Vector2f player, float t);
 
-	void vision(sf::Vector2f worker);
 };

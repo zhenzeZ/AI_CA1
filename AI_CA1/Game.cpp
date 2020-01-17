@@ -25,8 +25,9 @@ Game::Game() :
 		std::cout << "problem loading arial black font" << std::endl;
 	}
 
-	setupMap(); // load font 
-	setupWorkers(); // load texture
+	setupMap(); // create map
+	setupWorkers(); // spawn workers
+	setUpSweeper(); // spawn sweeper
 
 	m_player = new player(sf::Vector2f(600, 300), m_font);
 }
@@ -128,11 +129,20 @@ void Game::update(sf::Time t_deltaTime)
 	for (int i = 0; i < m_bullets.size(); i++) {
 		m_bullets[i]->update(t_deltaTime.asSeconds());
 
+		for (int x = 0; x < m_sweepers.size(); x++) {
+			if (m_bullets[i]->collisionCheck(m_sweepers[x]->boundingBox())) {
+				m_player->saveWorker(m_sweepers[x]->getWorker());
+				m_sweepers.erase(m_sweepers.begin() + x);
+				m_bullets[i]->dead();
+			}
+		}
+
 		if (!m_bullets[i]->checkAlive()) {
 			m_bullets.erase(m_bullets.begin() + i);
 		}
 	}
 
+	/* player movement*/
 	m_player->update(t_deltaTime.asSeconds());
 
 	for (int i = 0; i < m_rooms.size(); i++) {
@@ -141,13 +151,30 @@ void Game::update(sf::Time t_deltaTime)
 		}
 	}
 
+	/* worker movement*/
 	for (int i = 0; i < m_workers.size(); i++) {
 		m_workers[i]->update(t_deltaTime.asSeconds());
-		if (m_workers[i]->catchCheck(m_player->playerPosition())) {
-			m_player->saveWorker();
+		if (m_workers[i]->collisionCheck(m_player->boundingBox())) {
+			m_player->saveWorker(1);
 			m_workers.erase(m_workers.begin() + i);
 		}
+
+		for (int x = 0; x < m_sweepers.size(); x++) {
+			m_sweepers[x]->vision(m_workers[i]->workerPosition(),1);
+			if (m_workers[i]->collisionCheck(m_sweepers[x]->boundingBox())) {
+				m_workers.erase(m_workers.begin() + i);
+				m_sweepers[x]->catchWorker();
+				m_sweepers[x]->wanderState();
+			}
+		}
 	}
+
+	/*sweeper movement*/
+	for (int i = 0; i < m_sweepers.size(); i++) {
+		m_sweepers[i]->update(m_player->playerPosition(), t_deltaTime.asSeconds());
+
+	}
+
 
 	/*if (m_room->isPlayerInRoom(m_player->playerSize(), m_player->playerPosition())) {
 		m_player->buttonCheck();
@@ -175,6 +202,10 @@ void Game::render()
 		m_workers[i]->render(m_window);
 	}
 
+	for (int i = 0; i < m_sweepers.size(); i++) {
+		m_sweepers[i]->render(m_window);
+	}
+
 	m_player->render(m_window);
 
 	m_window.display();
@@ -188,32 +219,32 @@ void Game::setupMap()
 	m_numOfRoom = 0;
 
 	m_roomPosition.push_back(sf::Vector2f(500, 500));
-	m_roomSize.push_back(sf::Vector2f(600, 600));
+	m_roomSize.push_back(sf::Vector2i(600, 600));
 
 	m_roomPosition.push_back(sf::Vector2f(500, 0));
-	m_roomSize.push_back(sf::Vector2f(300, 550));
+	m_roomSize.push_back(sf::Vector2i(300, 550));
 
 	m_roomPosition.push_back(sf::Vector2f(500, -700));
-	m_roomSize.push_back(sf::Vector2f(1000, 1000));
+	m_roomSize.push_back(sf::Vector2i(1000, 1000));
 
 	m_roomPosition.push_back(sf::Vector2f(-400, -700));
-	m_roomSize.push_back(sf::Vector2f(950, 300));
+	m_roomSize.push_back(sf::Vector2i(950, 300));
 
 	m_roomPosition.push_back(sf::Vector2f(-1100, -700));
-	m_roomSize.push_back(sf::Vector2f(600, 600));
+	m_roomSize.push_back(sf::Vector2i(600, 600));
 
 	m_roomPosition.push_back(sf::Vector2f(-1100, -200));
-	m_roomSize.push_back(sf::Vector2f(300, 550));
+	m_roomSize.push_back(sf::Vector2i(300, 550));
 
 	m_roomPosition.push_back(sf::Vector2f(-1100, 500));
-	m_roomSize.push_back(sf::Vector2f(1000, 1000));
+	m_roomSize.push_back(sf::Vector2i(1000, 1000));
 
 	m_roomPosition.push_back(sf::Vector2f(-200, 500));
-	m_roomSize.push_back(sf::Vector2f(950, 300));
+	m_roomSize.push_back(sf::Vector2i(950, 300));
 	
 
 	for (int i = 0; i < m_roomPosition.size(); i++) {
-		m_room = new room(m_roomSize[i], m_roomPosition[i]); // size and position
+		m_room = new room(sf::Vector2f(m_roomSize[i]), m_roomPosition[i]); // size and position
 		m_rooms.push_back(m_room);
 		m_numOfRoom++;
 	}
@@ -222,16 +253,31 @@ void Game::setupMap()
 }
 
 /// <summary>
-/// load the texture and setup the sprite for the logo
+/// randomly spawn the worker on the map
 /// </summary>
 void Game::setupWorkers()
 {
-	m_maxWorker = 10;
+	m_maxWorker = 1;
 
 	for (int i = 0; i < m_maxWorker; i++) {
 
-		int spawnRoom = std::rand() % m_numOfRoom;
+		//int spawnRoom = std::rand() % m_numOfRoom;
+		int spawnRoom = 1;
 		m_worker = new worker(m_rooms[spawnRoom]->getOrigin(), m_rooms[spawnRoom]->getPosition(), m_rooms[spawnRoom]->getSize());
 		m_workers.push_back(m_worker);
+	}
+}
+
+/// <summary>
+/// spawn the Sweeper
+/// </summary>
+void Game::setUpSweeper() {
+	m_maxSweeper = 1;
+
+	for (int i = 0; i < m_maxSweeper; i++) {
+		//int spawnRoom = std::rand() % m_numOfRoom;
+		int spawnRoom = 0;
+		m_sweeper = new sweeper(m_roomPosition[spawnRoom], m_roomPosition, m_roomSize , spawnRoom, m_font);
+		m_sweepers.push_back(m_sweeper);
 	}
 }

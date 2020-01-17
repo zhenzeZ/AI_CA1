@@ -10,7 +10,7 @@ public:
 	void update(float t);
 	void render(sf::RenderWindow& window);
 
-	void saveWorker() { m_workerSaved++; }
+	void saveWorker(int i) { m_workerSaved += i; }
 
 	void playerInTheRoom() { m_playerInRoom = true; }
 

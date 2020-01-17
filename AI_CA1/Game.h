@@ -39,6 +39,7 @@ private:
 
 	void setupMap();
 	void setupWorkers();
+	void setUpSweeper();
 
 	sf::RenderWindow m_window; // main SFML window
 	sf::Font m_font; // font used by message
@@ -56,14 +57,15 @@ private:
 	vector<item*> m_items;
 
 	vector<sf::Vector2f> m_roomPosition;
-	vector<sf::Vector2f> m_roomSize;
+	vector<sf::Vector2i> m_roomSize;
 
-	float m_itemSpawnRate;
+	float m_itemSpawnRate; // time to spawn item on the map
 
 	bool m_exitGame; // control exiting game
 	
 	int m_numOfRoom; // number of rooms in the map
 	int m_maxWorker; // max number of worker
+	int m_maxSweeper; // max number of sweeper
 };
 
 #endif // !GAME_HPP

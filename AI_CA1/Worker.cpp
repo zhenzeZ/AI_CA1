@@ -5,7 +5,7 @@ worker::worker(sf::Vector2f start, sf::Vector2f position, sf::Vector2i range) :
 	position(start),
 	rotation(0),
 	radian(rotation* PI / 180),
-	speed(100),
+	speed(50),
 	radius(150.0f),
 	m_randomOrigin(position),
 	m_randomRange(range),
@@ -107,8 +107,9 @@ void worker::wander(sf::Vector2f player, float t) {
 
 	float distance = (player.x - position.x) * (player.x - position.x) + (player.y - position.y) + (player.y - position.y);
 	distance = sqrt(distance);
-	if (distance < 50.0f) {
+	if (distance < 70.0f) {
 		m_target = sf::Vector2f(rand() % m_randomRange.x + m_randomOrigin.x, rand() % m_randomRange.y + m_randomOrigin.y);
+		//cout << "x: " << m_target.x << " y: " << m_target.y << endl;
 	}
 }
 

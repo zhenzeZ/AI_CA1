@@ -15,6 +15,7 @@ public:
 	bool catchCheck(sf::Vector2f player);
 
 	sf::FloatRect boundingBox();
+	sf::Vector2f workerPosition() { return position; } // return current positon
 	bool collisionCheck(sf::FloatRect object);
 
 private:

@@ -1,20 +1,22 @@
 #include "Sweeper.h"
 
-sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current, sf::Font font) :
+sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, vector<sf::Vector2i> roomSize, int current, sf::Font font) :
 	PI(atan(1) * 4),
 	position(start),
 	rotation(0),
 	radian(rotation* PI / 180),
-	speed(150),
+	speed(70),
 	radius(150.0f),
-	m_target(sf::Vector2f(rand() % 800, rand() % 600)),
+	m_target(sf::Vector2f(rand() % roomSize[current].x + (roomPosition[current].x - roomSize[current].x / 2), rand() % roomSize[current].y + (roomPosition[current].y - roomSize[current].y / 2))),
 	m_aiStates(AIStates::Wander),
 	viewAngle(50),
-	viewRange(150.0f),
+	viewRange(300.0f),
+	m_searchCounter(0),
+	m_roomPosition(roomPosition),
+	m_roomSize(roomSize),
 	m_currentRoom(current),
 	m_font(font)
 {
-
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/Sweeper.png"))
 	{
 		std::string s("Error loading image");
@@ -30,26 +32,28 @@ sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int curr
 	m_workerText.setFillColor(sf::Color::White);
 	m_workerText.setOutlineColor(sf::Color::Black);
 	m_workerText.setOutlineThickness(2);
-	m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
+	//m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
 
 	m_triangle.setPointCount(3);
-	m_triangle.setFillColor(sf::Color(255, 255, 255, 100));
+	m_triangle.setFillColor(sf::Color(0, 255, 0, 100));
 }
 
 sweeper::~sweeper() {
 
 }
 
-void sweeper::update(sf::Vector2f player,sf::Vector2f worker, float t) {
+void sweeper::update(sf::Vector2f player,float t) {
+
+	vision(player, 2);
 
 	m_nextRoom = m_currentRoom++;
 	if (m_nextRoom >= m_roomPosition.size()) {
 		m_nextRoom = 0;
 	}
 
-	previousRoom = m_currentRoom--;
-	if (previousRoom < 0) {
-		previousRoom = m_roomPosition.size() - 1;
+	m_previousRoom = m_currentRoom--;
+	if (m_previousRoom < 0) {
+		m_previousRoom = m_roomPosition.size() - 1;
 	}
 
 
@@ -58,7 +62,7 @@ void sweeper::update(sf::Vector2f player,sf::Vector2f worker, float t) {
 		wander(m_target, t);
 		break;
 	case AIStates::Seek:
-		seek(player, t);
+		seek(m_target, t);
 		break;
 	case AIStates::Flee:
 		flee(player, t);
@@ -70,16 +74,27 @@ void sweeper::update(sf::Vector2f player,sf::Vector2f worker, float t) {
 	m_sprite.setPosition(position);
 	m_sprite.setRotation(rotation);
 
-	vision(player);
-
+	/*show how many worker catched */
 	m_workerText.setString("Worker : " + std::to_string(m_worker));
 	m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
 
+	/*set the view range position*/
+	m_triangle.setPoint(0, position);
+
+	float viewRadian = viewAngle * PI / 180;
+	m_viewEdge.x = position.x + sin((-radian + PI / 2) - (viewRadian / 2)) * viewRange;
+	m_viewEdge.y = position.y + cos((-radian + PI / 2) - (viewRadian / 2)) * viewRange;
+	m_triangle.setPoint(1, m_viewEdge);
+
+	m_viewEdge.x = position.x + sin((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
+	m_viewEdge.y = position.y + cos((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
+	m_triangle.setPoint(2, m_viewEdge);
+
 }
 
-void sweeper::vision(sf::Vector2f worker) {
+void sweeper::vision(sf::Vector2f worker, int style) {
 	// check the distance between player and guard
-	float distance = (worker.x - position.x) * (worker.x - position.x) + (worker.y - position.y) + (worker.y - position.y);
+	float distance = (worker.x - position.x) * (worker.x - position.x) + (worker.y - position.y) * (worker.y - position.y);
 	distance = sqrt(distance);
 
 	sf::Vector2f facing = velocity;
@@ -98,22 +113,35 @@ void sweeper::vision(sf::Vector2f worker) {
 
 	if (viewAngle / 2 > angleBetWeen && distance < viewRange) {
 		m_triangle.setFillColor(sf::Color(255, 0, 0, 100));
-		m_aiStates = AIStates::Seek;
+		if (style == 1) {
+			m_target = worker;
+			m_aiStates = AIStates::Seek;
+		}
+		else if (style == 2 && m_aiStates != AIStates::Flee) {
+			m_aiStates = AIStates::Flee;
+
+			float distanceNext;
+			distanceNext = (worker.x - m_roomPosition[m_nextRoom].x) * (worker.x - m_roomPosition[m_nextRoom].x) + (worker.y - m_roomPosition[m_nextRoom].y) + (worker.y - m_roomPosition[m_nextRoom].y);
+			distanceNext = sqrt(distanceNext);
+
+			float distancePre;
+			distancePre = (worker.x - m_roomPosition[m_previousRoom].x) * (worker.x - m_roomPosition[m_previousRoom].x) + (worker.y - m_roomPosition[m_previousRoom].y) + (worker.y - m_roomPosition[m_previousRoom].y);
+			distancePre = sqrt(distancePre);
+
+			if (distanceNext >= distancePre) {
+				m_target = m_roomPosition[m_nextRoom];
+				m_currentRoom = m_nextRoom;
+			}
+			else {
+				m_target = m_roomPosition[m_previousRoom];
+				m_currentRoom = m_previousRoom;
+			}
+		}
 	}
 	else {
-		m_triangle.setFillColor(sf::Color(255, 255, 255, 100));
+		m_triangle.setFillColor(sf::Color(0, 255, 0, 100));
 	}
 
-	m_triangle.setPoint(0, position);
-
-	float viewRadian = viewAngle * PI / 180;
-	m_viewEdge.x = position.x + sin((-radian + PI / 2) - (viewRadian / 2)) * viewRange;
-	m_viewEdge.y = position.y + cos((-radian + PI / 2) - (viewRadian / 2)) * viewRange;
-	m_triangle.setPoint(1, m_viewEdge);
-
-	m_viewEdge.x = position.x + sin((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
-	m_viewEdge.y = position.y + cos((-radian + PI / 2) + (viewRadian / 2)) * viewRange;
-	m_triangle.setPoint(2, m_viewEdge);
 }
 
 /*
@@ -137,7 +165,7 @@ void sweeper::wander(sf::Vector2f target, float t) {
 		if ((targetRotation - rotation) > (rotation + 360 - targetRotation))
 		{
 			float rotate = rotation - (targetRotation - 360);
-			rotation = rotation - rotate * t;
+			rotation = rotation - rotate * t * 3;
 
 			if (rotation < -180) {
 				rotation = 180;
@@ -157,7 +185,7 @@ void sweeper::wander(sf::Vector2f target, float t) {
 		if ((rotation - targetRotation) > (targetRotation + 360 - rotation))
 		{
 			float rotate = (targetRotation + 360) - rotation;
-			rotation = rotation + rotate * t;
+			rotation = rotation + rotate * t * 3;
 
 			if (rotation > 180) {
 				rotation = -180;
@@ -181,39 +209,37 @@ void sweeper::wander(sf::Vector2f target, float t) {
 
 	float distance = (target.x - position.x) * (target.x - position.x) + (target.y - position.y) + (target.y - position.y);
 	distance = sqrt(distance);
-	if (distance < 50.0f) {
-		m_target = sf::Vector2f(rand() % 800, rand() % 600);
+
+	/* sweeper will move the next room when it arrive to the target positoin 3 times in one room*/
+	if (distance < 75.0f) {
+		m_target = sf::Vector2f(rand() % m_roomSize[m_currentRoom].x + (m_roomPosition[m_currentRoom].x - m_roomSize[m_currentRoom].x / 2), rand() % m_roomSize[m_currentRoom].y + (m_roomPosition[m_currentRoom].y - m_roomSize[m_currentRoom].y / 2));
+		cout << "x: " << m_target.x << " y: " << m_target.y << endl;
+		m_searchCounter++;
+		if (m_searchCounter > 3) {
+			m_searchCounter = 0;
+			m_currentRoom++;
+			m_target = m_roomPosition[m_currentRoom];
+			if (m_currentRoom >= m_roomPosition.size()) {
+				m_currentRoom = 0;
+			}
+		}
 	}
+
 }
 
 /*
 the object will run away from the player position
 */
 void sweeper::flee(sf::Vector2f player, float t) {
-
-	float distanceNext;
-	distanceNext = (player.x - m_roomPosition[m_nextRoom].x) * (player.x - m_roomPosition[m_nextRoom].x) + (player.y - m_roomPosition[m_nextRoom].y) + (player.y - m_roomPosition[m_nextRoom].y);
-	distanceNext = sqrt(distanceNext);
-
-	float distancePre;
-	distancePre = (player.x - m_roomPosition[previousRoom].x) * (player.x - m_roomPosition[previousRoom].x) + (player.y - m_roomPosition[previousRoom].y) + (player.y - m_roomPosition[previousRoom].y);
-	distancePre = sqrt(distancePre);
-
-	if (distanceNext >= distancePre) {
-		m_target = m_roomPosition[m_nextRoom];
-	}
-	else {
-		m_target = m_roomPosition[previousRoom];
-	}
-
-	float distanceX = player.x - position.x;
-	float distanceY = player.y - position.y;
+	float distanceX = m_target.x - position.x;
+	float distanceY = m_target.y - position.y;
 	float x = 0;
 	float targetRadian = atan(x);
 
 	if (distanceY != 0) {
 		targetRadian = atan2(distanceY, distanceX);
 	}
+
 
 	float targetRotation = targetRadian * 180 / PI;
 
@@ -222,7 +248,7 @@ void sweeper::flee(sf::Vector2f player, float t) {
 		if ((targetRotation - rotation) > (rotation + 360 - targetRotation))
 		{
 			float rotate = rotation - (targetRotation - 360);
-			rotation = rotation - rotate * t;
+			rotation = rotation - rotate * t * 3;
 
 			if (rotation < -180) {
 				rotation = 180;
@@ -234,6 +260,7 @@ void sweeper::flee(sf::Vector2f player, float t) {
 			rotation = rotation + rotate * t;
 		}
 
+
 	}
 
 	if (rotation > targetRotation)
@@ -241,7 +268,7 @@ void sweeper::flee(sf::Vector2f player, float t) {
 		if ((rotation - targetRotation) > (targetRotation + 360 - rotation))
 		{
 			float rotate = (targetRotation + 360) - rotation;
-			rotation = rotation + rotate * t;
+			rotation = rotation + rotate * t * 3;
 
 			if (rotation > 180) {
 				rotation = -180;
@@ -262,7 +289,12 @@ void sweeper::flee(sf::Vector2f player, float t) {
 	position.x += velocity.x * t;
 	position.y += velocity.y * t;
 
+	float distance = (m_target.x - position.x) * (m_target.x - position.x) + (m_target.y - position.y) + (m_target.y - position.y);
+	distance = sqrt(distance);
 
+	if (distance < 75.0f) {
+		wanderState();
+	}
 }
 
 /*
@@ -334,4 +366,21 @@ void sweeper::seek(sf::Vector2f worker, float t)
 void sweeper::render(sf::RenderWindow& window) {
 	window.draw(m_sprite);
 	window.draw(m_triangle);
+	window.draw(m_workerText);
+}
+
+sf::FloatRect sweeper::boundingBox()
+{
+	//bounding box for collision
+	sf::FloatRect boundingBox(m_sprite.getGlobalBounds().left + 10,
+		m_sprite.getGlobalBounds().top + 10,
+		m_sprite.getGlobalBounds().width - 10,
+		m_sprite.getGlobalBounds().height - 10);
+	return boundingBox;
+}
+
+void sweeper::wanderState() {
+	m_target = sf::Vector2f(rand() % m_roomSize[m_currentRoom].x + (m_roomPosition[m_currentRoom].x - m_roomSize[m_currentRoom].x / 2), rand() % m_roomSize[m_currentRoom].y + (m_roomPosition[m_currentRoom].y - m_roomSize[m_currentRoom].y / 2));
+	cout << "wander! x: " << m_target.x << " y: " << m_target.y << endl;
+	m_aiStates = AIStates::Wander; 
 }

@@ -18,7 +18,9 @@ public:
 
 	sf::FloatRect boundingBox();
 
+	void dead() { m_alive = false; }
 	void setState(sf::Vector2f position, float radius);
+	bool collisionCheck(sf::FloatRect object);
 private:
 
 	void setUpTexture();

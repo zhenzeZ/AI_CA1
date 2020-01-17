@@ -68,3 +68,14 @@ sf::FloatRect bullet::boundingBox()
 		m_bulletSprite.getGlobalBounds().height - 10);
 	return boundingBox;
 }
+
+bool bullet::collisionCheck(sf::FloatRect object)
+{
+	if (boundingBox().intersects(object))
+	{
+		m_alive = false;
+		return true;
+	}
+
+	return false;
+}

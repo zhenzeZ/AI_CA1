@@ -20,6 +20,7 @@ player::player(sf::Vector2f start, sf::Font font) :
 {
 
 	setUpShape();
+	setUpText();
 
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/player.png"))
 	{
@@ -48,24 +49,24 @@ void player::setUpShape()
 	for (int i = 0; i < 2; i++)
 	{
 		m_HealthBar[i].setSize(sf::Vector2f(100, 20));
-		m_HealthBar[i].setPosition(sf::Vector2f(position.x - 820, position.y + 750));
+		//m_HealthBar[i].setPosition(sf::Vector2f(position.x - 500, position.y - 600));
 	}
 	m_HealthBar[1].setFillColor(sf::Color::Red);
 	m_HealthBar[0].setOutlineThickness(3);
-	m_HealthBar[0].setOutlineColor(sf::Color::Black);
+	m_HealthBar[0].setOutlineColor(sf::Color::White);
 }
 void player::setUpText() {
 	m_ammoText.setFont(m_font);
-	m_ammoText.setFillColor(sf::Color::White);
-	m_ammoText.setOutlineColor(sf::Color::Black);
+	//m_ammoText.setFillColor(sf::Color::Blue);
+	m_ammoText.setOutlineColor(sf::Color::White);
 	m_ammoText.setOutlineThickness(2);
-	m_ammoText.setPosition(sf::Vector2f(position.x - 720, position.y + 750));
+	//m_ammoText.setPosition(sf::Vector2f(position.x - 500, position.y - 500));
 
 	m_workersText.setFont(m_font);
-	m_workersText.setFillColor(sf::Color::White);
-	m_workersText.setOutlineColor(sf::Color::Black);
+	m_workersText.setFillColor(sf::Color::Black);
+	m_workersText.setOutlineColor(sf::Color::White);
 	m_workersText.setOutlineThickness(2);
-	m_workersText.setPosition(sf::Vector2f(position.x - 620, position.y + 750));
+	//m_workersText.setPosition(sf::Vector2f(position.x - 500, position.y - 400));
 }
 
 void player::update(float t) {
@@ -96,19 +97,19 @@ void player::update(float t) {
 	}
 	else
 	{
-		m_ammoText.setFillColor(sf::Color::White);
+		m_ammoText.setFillColor(sf::Color::Black);
 	}
 
 	m_workersText.setString("Worker saved: " + std::to_string(m_workerSaved));
 	m_ammoText.setString("AMMO: " + std::to_string(m_ammo));
 
-	m_workersText.setPosition(sf::Vector2f(position.x - 620, position.y + 750));
-	m_ammoText.setPosition(sf::Vector2f(position.x - 720, position.y + 750));
+	m_workersText.setPosition(sf::Vector2f(position.x - 450, position.y - 450));
+	m_ammoText.setPosition(sf::Vector2f(position.x - 450, position.y - 420));
 
 	/*set health bar position and value*/
 	for (int i = 0; i < 2; i++)
 	{
-		m_HealthBar[i].setPosition(sf::Vector2f(position.x - 820, position.y + 750));
+		m_HealthBar[i].setPosition(sf::Vector2f(position.x - 450, position.y - 480));
 	}
 	m_HealthBar[1].setScale(sf::Vector2f(m_health / 100, 1));
 
