@@ -20,12 +20,15 @@ Game::Game() :
 	m_window{ sf::VideoMode{ 1000U, 1000U, 32U }, "AI-Lab6" },
 	m_exitGame{ false } //when true game will exit
 {
-
+	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
+	{
+		std::cout << "problem loading arial black font" << std::endl;
+	}
 
 	setupMap(); // load font 
 	setupWorkers(); // load texture
 
-	m_player = new player(sf::Vector2f(600, 300));
+	m_player = new player(sf::Vector2f(600, 300), m_font);
 }
 
 /// <summary>
@@ -110,12 +113,16 @@ void Game::update(sf::Time t_deltaTime)
 		m_window.close();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_player->m_fireRate <= 0)
+	/*fire a bullet and reduce the ammo value in player class*/
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) &&
+		m_player->m_fireRate <= 0 &&
+		m_player->getAmmo() > 0)
 	{
 		// fire a bullet
 
 		m_bullets.push_back(new bullet(m_player->playerPosition(), m_player->playerRadian()));
 		m_player->m_fireRate = 0.2f;
+		m_player->ammoChanged(-1);
 	}
 
 	for (int i = 0; i < m_bullets.size(); i++) {

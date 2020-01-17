@@ -5,7 +5,7 @@
 
 class player {
 public:
-	player(sf::Vector2f start);
+	player(sf::Vector2f start, sf::Font font);
 	~player();
 	void update(float t);
 	void render(sf::RenderWindow& window);
@@ -20,13 +20,20 @@ public:
 
 	float playerRadian() { return radian; }
 
+	void ammoChanged(int ammo) { m_ammo += ammo; }
+	int getAmmo() { return m_ammo; }
+
 	sf::FloatRect boundingBox();
 
 	void buttonCheck();
+	void powerUps(int itemStyle);
 
 	float m_fireRate;
 private:
 	void bounceOff();
+
+	void setUpText();
+	void setUpShape();
 
 	float acceleration;
 	float rotation;
@@ -38,6 +45,7 @@ private:
 	float pursueTime;
 
 	int m_workerSaved;
+	int m_ammo;
 	float m_health;
 	float m_energy;
 
@@ -50,8 +58,12 @@ private:
 
 	sf::View m_view;
 
+	sf::RectangleShape m_HealthBar[2]; // 1 for inside bar, 0 for out line edge
+
 	sf::Font m_font;
-	sf::Text m_workers;
+
+	sf::Text m_ammoText;
+	sf::Text m_workersText;
 
 	bool accelerating;
 

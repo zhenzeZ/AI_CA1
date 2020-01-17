@@ -1,6 +1,6 @@
 #include "Sweeper.h"
 
-sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current) :
+sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current, sf::Font font) :
 	PI(atan(1) * 4),
 	position(start),
 	rotation(0),
@@ -11,7 +11,8 @@ sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int curr
 	m_aiStates(AIStates::Wander),
 	viewAngle(50),
 	viewRange(150.0f),
-	m_currentRoom(current)
+	m_currentRoom(current),
+	m_font(font)
 {
 
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/Sweeper.png"))
@@ -24,6 +25,12 @@ sweeper::sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int curr
 	m_sprite.setPosition(position);
 	m_sprite.setRotation(rotation);
 	m_sprite.setOrigin(sf::Vector2f(m_texture.getSize().x / 2, m_texture.getSize().y / 2));
+
+	m_workerText.setFont(m_font);
+	m_workerText.setFillColor(sf::Color::White);
+	m_workerText.setOutlineColor(sf::Color::Black);
+	m_workerText.setOutlineThickness(2);
+	m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
 
 	m_triangle.setPointCount(3);
 	m_triangle.setFillColor(sf::Color(255, 255, 255, 100));
@@ -64,6 +71,9 @@ void sweeper::update(sf::Vector2f player,sf::Vector2f worker, float t) {
 	m_sprite.setRotation(rotation);
 
 	vision(player);
+
+	m_workerText.setString("Worker : " + std::to_string(m_worker));
+	m_workerText.setPosition(sf::Vector2f(position.x - 20, position.y + 50));
 
 }
 

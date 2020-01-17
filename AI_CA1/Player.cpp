@@ -1,7 +1,8 @@
 #include "Player.h"
 
-player::player(sf::Vector2f start) :
+player::player(sf::Vector2f start, sf::Font font) :
 	PI(acos(-1)),
+	m_font(font),
 	acceleration(0),
 	accelerating(false),
 	maxSpeed(300),
@@ -12,10 +13,13 @@ player::player(sf::Vector2f start) :
 	pursueTime(0.5),
 	m_fireRate(0.0f),
 	m_playerInRoom(false),
-	m_workerSaved(0.0f),
+	m_workerSaved(0),
+	m_ammo(20),
 	m_health(100.0f),
 	m_energy(50.0f)
 {
+
+	setUpShape();
 
 	if (!m_texture.loadFromFile("./ASSETS/IMAGES/player.png"))
 	{
@@ -23,20 +27,11 @@ player::player(sf::Vector2f start) :
 		throw std::exception(s.c_str());
 	} // loading image check
 
+
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(position);
 	m_sprite.setRotation(rotation);
 	m_sprite.setOrigin(sf::Vector2f(m_texture.getSize().x / 2, m_texture.getSize().y / 2));
-
-	if (!m_font.loadFromFile("ASSETS\\FONTS\\ariblk.ttf"))
-	{
-		std::cout << "problem loading arial black font" << std::endl;
-	}
-
-	m_workers.setFont(m_font);
-	m_workers.setCharacterSize(20);
-	m_workers.setFillColor(sf::Color::White);
-	m_workers.setOutlineThickness(0.0f);
 
 	size = sf::Vector2f(m_texture.getSize());
 
@@ -46,6 +41,31 @@ player::player(sf::Vector2f start) :
 
 player::~player() {
 
+}
+
+void player::setUpShape()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		m_HealthBar[i].setSize(sf::Vector2f(100, 20));
+		m_HealthBar[i].setPosition(sf::Vector2f(position.x - 820, position.y + 750));
+	}
+	m_HealthBar[1].setFillColor(sf::Color::Red);
+	m_HealthBar[0].setOutlineThickness(3);
+	m_HealthBar[0].setOutlineColor(sf::Color::Black);
+}
+void player::setUpText() {
+	m_ammoText.setFont(m_font);
+	m_ammoText.setFillColor(sf::Color::White);
+	m_ammoText.setOutlineColor(sf::Color::Black);
+	m_ammoText.setOutlineThickness(2);
+	m_ammoText.setPosition(sf::Vector2f(position.x - 720, position.y + 750));
+
+	m_workersText.setFont(m_font);
+	m_workersText.setFillColor(sf::Color::White);
+	m_workersText.setOutlineColor(sf::Color::Black);
+	m_workersText.setOutlineThickness(2);
+	m_workersText.setPosition(sf::Vector2f(position.x - 620, position.y + 750));
 }
 
 void player::update(float t) {
@@ -70,7 +90,27 @@ void player::update(float t) {
 	m_sprite.setPosition(position);
 	m_sprite.setRotation(rotation);
 
-	m_workers.setPosition(position);
+	if (m_ammo <= 5)
+	{
+		m_ammoText.setFillColor(sf::Color::Red);
+	}
+	else
+	{
+		m_ammoText.setFillColor(sf::Color::White);
+	}
+
+	m_workersText.setString("Worker saved: " + std::to_string(m_workerSaved));
+	m_ammoText.setString("AMMO: " + std::to_string(m_ammo));
+
+	m_workersText.setPosition(sf::Vector2f(position.x - 620, position.y + 750));
+	m_ammoText.setPosition(sf::Vector2f(position.x - 720, position.y + 750));
+
+	/*set health bar position and value*/
+	for (int i = 0; i < 2; i++)
+	{
+		m_HealthBar[i].setPosition(sf::Vector2f(position.x - 820, position.y + 750));
+	}
+	m_HealthBar[1].setScale(sf::Vector2f(m_health / 100, 1));
 
 	m_playerInRoom = false;
 }
@@ -136,11 +176,33 @@ void player::buttonCheck() {
 	}
 }
 
+void player::powerUps(int itemStyle) {
+	switch (itemStyle)
+	{
+	case 1:
+		break;
+	case 2:
+		break;
+	case 3:
+		break;
+	default:
+		break;
+	}
+}
+
 void player::render(sf::RenderWindow& window) {
 
 	window.setView(m_view);
 
 	window.draw(m_sprite);
+
+	for (int i = 0; i < 2; i++)
+	{
+		window.draw(m_HealthBar[i]);
+	}
+
+	window.draw(m_ammoText);
+	window.draw(m_workersText);
 }
 
 sf::FloatRect player::boundingBox()
@@ -152,3 +214,4 @@ sf::FloatRect player::boundingBox()
 		m_sprite.getGlobalBounds().height - 10);
 	return boundingBox;
 }
+

@@ -138,3 +138,13 @@ sf::FloatRect worker::boundingBox()
 		m_sprite.getGlobalBounds().height - 10);
 	return boundingBox;
 }
+
+bool worker::collisionCheck(sf::FloatRect object)
+{
+	if (boundingBox().intersects(object))
+	{
+		return true;
+	}
+
+	return false;
+}

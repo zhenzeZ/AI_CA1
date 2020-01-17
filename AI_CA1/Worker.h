@@ -15,6 +15,7 @@ public:
 	bool catchCheck(sf::Vector2f player);
 
 	sf::FloatRect boundingBox();
+	bool collisionCheck(sf::FloatRect object);
 
 private:
 	float speed;

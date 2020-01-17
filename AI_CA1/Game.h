@@ -18,6 +18,7 @@
 #include "Worker.h"
 #include "Sweeper.h"
 #include "Bullet.h"
+#include "Item.h"
 
 class Game
 {
@@ -40,19 +41,24 @@ private:
 	void setupWorkers();
 
 	sf::RenderWindow m_window; // main SFML window
+	sf::Font m_font; // font used by message
 
 	player* m_player;
 	room* m_room;
 	worker* m_worker;
 	sweeper* m_sweeper;
+	item* m_item;
 
 	vector<worker*> m_workers; 
 	vector<bullet*> m_bullets;
 	vector<room*> m_rooms;
 	vector<sweeper*> m_sweepers;
+	vector<item*> m_items;
 
 	vector<sf::Vector2f> m_roomPosition;
 	vector<sf::Vector2f> m_roomSize;
+
+	float m_itemSpawnRate;
 
 	bool m_exitGame; // control exiting game
 	

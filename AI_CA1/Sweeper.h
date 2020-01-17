@@ -15,7 +15,7 @@ using namespace std;
 
 class sweeper {
 public:
-	sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current);
+	sweeper(sf::Vector2f start, vector<sf::Vector2f> roomPosition, int current, sf::Font font);
 	~sweeper();
 	void update(sf::Vector2f player, sf::Vector2f worker , float t);
 	void render(sf::RenderWindow& window);
@@ -49,6 +49,9 @@ private:
 	float viewRange;
 
 	int m_worker;
+
+	sf::Font m_font;
+	sf::Text m_workerText;
 
 	vector<sf::Vector2f> m_roomPosition;
 	int m_currentRoom;
