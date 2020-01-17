@@ -72,9 +72,6 @@ void AlienNest::render(sf::RenderWindow& window)
 // when player is in range - fire  interceptor guided missiles
 void AlienNest::fire()
 {
-	// spawn missile at nest position
-	// missile uses pursue on player position
-
 	m_missilePosition = position;
 	if (!m_missileTexture.loadFromFile("./ASSETS/IMAGES/missile.png"))
 	{
@@ -133,4 +130,9 @@ sf::FloatRect AlienNest::missileBoundingBox()
 void AlienNest::damage()
 {
 	m_health--;
+}
+
+void AlienNest::destroyMissile()
+{
+	m_isMissileAlive = false;
 }

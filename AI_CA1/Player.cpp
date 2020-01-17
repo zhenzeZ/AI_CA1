@@ -144,6 +144,11 @@ void player::movementCalculate(float t) {
 	pursue = position + velocity * pursueTime;
 }
 
+void player::damage()
+{
+	m_health-= 10;
+}
+
 void player::bounceOff() {
 	if (!m_playerInRoom) {
 		speed = -speed * 0.5f;

@@ -17,7 +17,8 @@ public:
 	sf::FloatRect boundingBox();
 	sf::FloatRect missileBoundingBox();
 	void damage();
-
+	sf::Vector2f getPosition() { return position; }
+	void destroyMissile();
 private:
 	bool m_isAlive;
 	player& m_player;

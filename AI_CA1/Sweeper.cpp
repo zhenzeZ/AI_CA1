@@ -221,10 +221,7 @@ void sweeper::wander(sf::Vector2f target, float t) {
 			if (m_currentRoom >= m_roomPosition.size()) {
 				m_currentRoom = 0;
 			}
-
 			m_target = m_roomPosition[m_currentRoom];
-
-			
 		}
 	}
 

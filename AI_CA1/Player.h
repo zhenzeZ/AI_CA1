@@ -32,7 +32,7 @@ public:
 	float m_fireRate;
 
 	float getMaxSpeed() { return maxSpeed; }
-
+	void damage();
 private:
 	void bounceOff();
 
@@ -60,7 +60,6 @@ private:
 
 	sf::Vector2f pursue;
 
-	sf::View m_view;
 
 	sf::RectangleShape m_HealthBar[2]; // 1 for inside bar, 0 for out line edge
 
