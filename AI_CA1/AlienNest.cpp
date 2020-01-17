@@ -55,7 +55,7 @@ void AlienNest::update(float t)
 		dynamicPursue(t / 1000);
 		m_missileSprite.setPosition(m_missilePosition);
 		m_missilePosition += m_missileVelocity;
-		m_missileSprite.setRotation(m_orientation * 2);
+		m_missileSprite.setRotation(m_orientation);
 	}
 }
 

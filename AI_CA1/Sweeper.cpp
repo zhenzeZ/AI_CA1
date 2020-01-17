@@ -218,10 +218,13 @@ void sweeper::wander(sf::Vector2f target, float t) {
 		if (m_searchCounter > 3) {
 			m_searchCounter = 0;
 			m_currentRoom++;
-			m_target = m_roomPosition[m_currentRoom];
 			if (m_currentRoom >= m_roomPosition.size()) {
 				m_currentRoom = 0;
 			}
+
+			m_target = m_roomPosition[m_currentRoom];
+
+			
 		}
 	}
 

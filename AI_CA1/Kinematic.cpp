@@ -2,7 +2,7 @@
 
 float Kinematic::getNewOrientation(sf::Vector2f t_position1, sf::Vector2f t_position2)
 {
-	return toDegrees(atan2(-t_position2.y - t_position1.y, t_position2.x - t_position1.x));
+	return toDegrees(atan2(t_position2.y - t_position1.y, t_position2.x - t_position1.x));
 }
 
 float Kinematic::vectorLength(sf::Vector2f t_velocity)

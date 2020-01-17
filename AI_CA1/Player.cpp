@@ -98,6 +98,14 @@ void player::update(float t) {
 		m_ammoText.setFillColor(sf::Color::Black);
 	}
 
+	if (m_ammo < 0) {
+		m_ammo = 0;
+	}
+
+	if (m_health <= 0) {
+		m_health = 0;
+	}
+
 	m_workersText.setString("Worker saved: " + std::to_string(m_workerSaved));
 	m_ammoText.setString("AMMO: " + std::to_string(m_ammo));
 
@@ -173,12 +181,18 @@ void player::buttonCheck() {
 	}
 }
 
+/// <summary>
+/// restore health or ammo to player
+/// </summary>
+/// <param name="itemStyle"></param>
 void player::powerUps(int itemStyle) {
 	switch (itemStyle)
 	{
 	case 1:
+		m_ammo += 10;
 		break;
 	case 2:
+		m_health += 20;
 		break;
 	case 3:
 		break;
